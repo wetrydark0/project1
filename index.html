@@ -3,231 +3,423 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Забруднення стічних вод — Проєкт</title>
+    <title>Проєкт: Забруднення стічних вод</title>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&display=swap');
+
         :root {
-            --bg-color: #05080a;
-            --accent-blue: #00d2ff;
-            --accent-green: #3aefb2;
-            --glass: rgba(255, 255, 255, 0.07);
-            --text-color: #e0e0e0;
+            --bg-color: #010811; 
+            --accent: #00d4ff; 
+            --accent-glow: rgba(0, 212, 255, 0.4);
+            --text-main: #e6f1ff;
+            --glass-bg: rgba(255, 255, 255, 0.03);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --correct: #00ff88;
+            --wrong: #ff4d4d;
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Roboto, sans-serif; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
-        body {
+        body, html {
+            height: 100%;
             background-color: var(--bg-color);
-            color: var(--text-color);
+            color: var(--text-main);
+            font-family: 'Montserrat', sans-serif;
             overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+
+        /* --- ФОН --- */
+        .ocean-bg {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -10;
+            background: linear-gradient(180deg, #05192d, #010811, #0a243d);
+            background-size: 100% 300%;
+            animation: oceanFlow 10s ease infinite;
+        }
+
+        .bg-rays {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -9;
+            background: radial-gradient(circle at 50% -10%, rgba(0, 212, 255, 0.2) 0%, transparent 60%);
+            pointer-events: none;
+            animation: raysPulse 6s ease-in-out infinite;
+        }
+
+        .bubbles-container {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -8;
+            pointer-events: none;
+        }
+
+        .bubble {
+            position: absolute;
+            bottom: -20px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            animation: bubbleUp 8s linear infinite;
+        }
+
+        @keyframes oceanFlow {
+            0% { background-position: 0% 0%; }
+            50% { background-position: 0% 100%; }
+            100% { background-position: 0% 0%; }
+        }
+
+        @keyframes raysPulse {
+            0%, 100% { opacity: 0.4; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.2); }
+        }
+
+        @keyframes bubbleUp {
+            0% { transform: translateY(0) scale(1); opacity: 0; }
+            10% { opacity: 0.4; }
+            90% { opacity: 0.4; }
+            100% { transform: translateY(-110vh) scale(1.5); opacity: 0; }
+        }
+
+        .snap-container {
+            height: 100vh;
+            overflow-y: auto;
             scroll-snap-type: y mandatory;
-            background: radial-gradient(circle at center, #0a1a2a 0%, #05080a 100%);
+            position: relative;
+            z-index: 1;
+        }
+
+        #quiz-progress-bar {
+            position: fixed;
+            top: 0; left: 0; height: 5px;
+            width: 0%; background: var(--accent);
+            box-shadow: 0 0 15px var(--accent);
+            z-index: 1000;
+            transition: width 0.5s ease;
+            display: none;
         }
 
         section {
             height: 100vh;
             display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
             scroll-snap-align: start;
-            padding: 20px;
             position: relative;
+            padding: 20px;
         }
 
-        .glass-card {
-            background: var(--glass);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 25px;
-            padding: 40px;
-            max-width: 900px;
-            width: 90%;
-            max-height: 85vh;
-            overflow-y: auto; /* Щоб великий текст не вилазив, а прокручувався всередині */
-            text-align: center;
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+        .hero h1 {
+            font-size: clamp(2.5rem, 8vw, 4.5rem);
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            text-shadow: 0 0 20px var(--accent-glow);
         }
 
-        /* Стилізація скроллбару всередині карток */
-        .glass-card::-webkit-scrollbar { width: 6px; }
-        .glass-card::-webkit-scrollbar-thumb { background: var(--accent-blue); border-radius: 10px; }
+        .hero-title-wrap { position: relative; padding: 40px; text-align: center; }
+        .hero-title-wrap::before, .hero-title-wrap::after {
+            content: ''; position: absolute; width: 60px; height: 60px;
+            border: 2px solid var(--accent);
+        }
+        .hero-title-wrap::before { top: 0; left: 0; border-right: none; border-bottom: none; }
+        .hero-title-wrap::after { bottom: 0; right: 0; border-left: none; border-top: none; }
 
-        h1 { font-size: clamp(2rem, 5vw, 3.5rem); color: var(--accent-blue); margin-bottom: 20px; text-transform: uppercase; letter-spacing: 2px; }
-        h2 { font-size: clamp(1.5rem, 4vw, 2.2rem); color: var(--accent-green); margin-bottom: 15px; }
-        p { font-size: 1.1rem; line-height: 1.7; margin-bottom: 15px; text-align: justify; }
+        .author-wrapper {
+            margin-top: 30px; padding: 10px 25px;
+            border: 1px solid var(--accent); border-radius: 50px;
+            background: rgba(0, 212, 255, 0.05);
+        }
+        .authors { display: flex; gap: 30px; }
+        .author-card span { font-size: 10px; color: var(--accent); display: block; text-transform: uppercase; }
 
-        /* ВІДЕО */
-        .video-wrapper { margin: 20px 0; }
-        .video-container {
-            width: 100%; max-width: 500px; height: 280px;
-            background: #000; border-radius: 15px; margin: 0 auto;
-            cursor: pointer; transition: 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        .content-box {
+            max-width: 1100px; width: 95%;
+            background: var(--glass-bg); backdrop-filter: blur(15px);
+            border: 1px solid var(--glass-border); border-radius: 30px;
+            padding: 30px 40px; display: flex; gap: 35px;
+            align-items: center; opacity: 0; transform: translateY(30px);
+            transition: all 0.8s ease-out;
+            max-height: 85vh; overflow-y: auto;
+        }
+
+        section.visible .content-box { opacity: 1; transform: translateY(0); }
+
+        .text-side { flex: 1.5; }
+        .image-side { flex: 1; height: 320px; border-radius: 20px; overflow: hidden; border: 1px solid var(--glass-border); }
+        .image-side img { width: 100%; height: 100%; object-fit: cover; }
+
+        h2 { font-size: 1.8rem; color: #fff; margin-bottom: 12px; text-transform: uppercase; }
+        p { font-size: 1rem; line-height: 1.6; margin-bottom: 15px; text-align: justify; color: #d1d9e0; }
+        .highlight { color: var(--accent); font-weight: bold; }
+
+        /* ВІДЕО СИСТЕМА */
+        .video-placeholder {
+            width: 100%; max-width: 600px; height: 340px;
+            background: #000; border-radius: 20px;
             display: flex; justify-content: center; align-items: center;
-            border: 2px solid var(--accent-blue); position: relative;
+            border: 1px solid var(--accent); cursor: pointer;
+            transition: 0.5s ease; position: relative; overflow: hidden;
         }
-        .video-container.active {
-            position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
-            width: 90vw; height: 50vw; z-index: 1000; max-width: none;
+        .video-placeholder.centered-video {
+            position: fixed; top: 50%; left: 50%;
+            transform: translate(-50%, -50%) scale(1.1);
+            width: 85vw; height: 48vw; z-index: 2000;
+            box-shadow: 0 0 100px rgba(0,0,0,0.8);
         }
-        .overlay {
-            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.95); z-index: 999;
+        .video-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.9); z-index: 1999; display: none;
         }
 
         /* ТЕСТИ */
-        .test-box { display: none; }
-        .test-box.active { display: block; animation: fadeIn 0.5s; }
-        .option-btn {
-            display: block; width: 100%; padding: 15px; margin: 10px 0;
-            background: rgba(255,255,255,0.05); border: 1px solid var(--accent-blue);
-            color: white; border-radius: 12px; cursor: pointer; transition: 0.3s;
-            font-size: 1rem;
-        }
-        .option-btn:hover { background: rgba(0, 210, 255, 0.2); transform: scale(1.02); }
-        .progress-container { width: 100%; height: 8px; background: rgba(255,255,255,0.1); border-radius: 4px; margin-bottom: 20px; overflow: hidden; }
-        .progress-bar { width: 0%; height: 100%; background: var(--accent-green); transition: 0.4s; }
+        .quiz-container { text-align: center; max-width: 800px; width: 100%; }
+        .options-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 30px; }
+        .option-btn { background: rgba(255,255,255,0.05); border: 1px solid var(--glass-border); padding: 20px; border-radius: 15px; color: #fff; cursor: pointer; transition: 0.3s; font-family: 'Montserrat'; }
+        .option-btn:hover { border-color: var(--accent); background: rgba(0, 212, 255, 0.1); }
+        .option-btn.correct { background: rgba(0, 255, 136, 0.2); border-color: var(--correct); }
+        .option-btn.wrong { background: rgba(255, 77, 77, 0.2); border-color: var(--wrong); }
 
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-
-        .counter-val { font-size: 4rem; font-weight: bold; color: var(--accent-blue); display: block; margin: 10px 0; }
+        .feedback-box { margin-top: 25px; padding: 20px; border-radius: 15px; display: none; background: rgba(255,255,255,0.02); }
+        .scroll-hint { margin-top: 20px; font-weight: bold; color: var(--accent); animation: bounce 2s infinite; display: none; }
         
-        footer-info { margin-top: 30px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 20px; }
+        .quiz-section { display: none; }
+        
+        .grid-info { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-top: 15px; width: 100%; }
+        .info-item { 
+            background: rgba(255,255,255,0.02); padding: 20px; border-radius: 20px; 
+            border: 1px solid var(--glass-border); cursor: pointer; transition: 0.4s;
+        }
+        .info-item.centered {
+            position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(1.1);
+            width: 500px; max-width: 90vw; z-index: 100; background: #010811; border-color: var(--accent);
+        }
+        .extra-info { display: none; margin-top: 15px; font-size: 0.9rem; }
+        .info-item.centered .extra-info { display: block; }
+
+        @keyframes bounce { 0%, 20%, 50%, 80%, 100% {transform: translateY(0);} 40% {transform: translateY(-10px);} }
     </style>
 </head>
 <body>
 
-    <div class="overlay" id="videoOverlay"></div>
+    <div id="quiz-progress-bar"></div>
+    <div class="ocean-bg"></div>
+    <div class="bg-rays"></div>
+    <div class="bubbles-container" id="bubbles"></div>
+    <div class="video-overlay" id="vOverlay"></div>
 
-    <section>
-        <div class="glass-card">
-            <h1>Забруднення стічних вод</h1>
-            <p>Стічні води — це одна з найбільших загроз для глобальної екосистеми. Щодня мільйони кубометрів відпрацьованої води потрапляють у річки та океани, несучи із собою хімікати, пластик та хвороботворні бактерії. Цей проект допоможе зрозуміти, як ми впливаємо на воду та як виправити ситуацію.</p>
-            <p style="text-align: center; color: var(--accent-green);">Гортайте вниз, щоб почати ↓</p>
-        </div>
-    </section>
-
-    <section>
-        <div class="glass-card">
-            <h2>Типи забруднень</h2>
-            <p>Стічні води поділяються на три основні категорії: побутові (від наших домівок), промислові (від заводів) та атмосферні (дощова вода, що змиває бруд із міських вулиць). Найнебезпечнішими є промислові стоки, оскільки вони містять важкі метали: ртуть, свинець та кадмій, які не розкладаються в природі.</p>
-            <p>Побутові стоки, хоч і здаються безпечнішими, перенасичені синтетичними миючими засобами. Вони змінюють хімічний склад води, роблячи її непридатною для життя більшості видів риб та рослин.</p>
-        </div>
-    </section>
-
-    <section>
-        <div class="glass-card">
-            <h2>Візуалізація проблеми</h2>
-            <p>Натисніть на відео нижче, щоб побачити процес поширення забруднення у відкритих водоймах. Це допоможе краще зрозуміти масштаб загрози.</p>
-            <div class="video-container" id="mainVideo">
-                <span id="playLabel">▶ ВІДТВОРИТИ ВІДЕО</span>
-                <video id="videoElement" style="display:none; width:100%; height:100%; object-fit: cover;">
-                    <source src="video/main.mp4" type="video/mp4">
-                </video>
+    <div class="snap-container" id="main-scroll">
+        <section class="hero visible">
+            <div class="hero-title-wrap">
+                <p style="letter-spacing: 10px; color: var(--accent); margin-bottom: 10px; font-size: 0.8rem;">ЕКОЛОГІЧНИЙ ПРОЄКТ</p>
+                <h1>Стічні води</h1>
             </div>
-        </div>
-    </section>
-
-    <section>
-        <div class="glass-card">
-            <h2>Тиха загроза: Фосфати</h2>
-            <p>Фосфати, які містяться у пральних порошках, є справжнім "допінгом" для синьо-зелених водоростей. Коли вони потрапляють у річку, починається бурхливе "цвітіння". Водорості розростаються настільки швидко, що поглинають весь кисень у воді.</p>
-            <p>Без кисню риба та інші мешканці водойм просто задихаються. Крім того, при розкладанні ці водорості виділяють токсини, які роблять воду отруйною для людей і тварин. Саме тому перехід на безфосфатну хімію — це перший крок до порятунку Дніпра та інших річок.</p>
-        </div>
-    </section>
-
-    <section id="counterSlide">
-        <div class="glass-card">
-            <h2>Масштаби в цифрах</h2>
-            <p>Кількість неочищеної води, яка скидається у світовий океан щосекунди (в літрах):</p>
-            <span class="counter-val" id="litersCounter">0</span>
-            <p>Це колосальна цифра, яка демонструє несправність або відсутність сучасних очисних систем у багатьох регіонах світу. Понад 80% стічних вод у країнах, що розвиваються, взагалі не проходять через фільтри.</p>
-        </div>
-    </section>
-
-    <section>
-        <div class="glass-card">
-            <h2>Шляхи порятунку</h2>
-            <p>Вирішення проблеми потребує комплексного підходу: від державної політики до особистих звичок кожного з нас.</p>
-            <p><strong>1. Механічна очистка:</strong> видалення великого сміття та піску.<br>
-            <strong>2. Біологічна очистка:</strong> використання спеціальних бактерій, які "поїдають" органічні забруднення.<br>
-            <strong>3. Хімічна нейтралізація:</strong> озонування та ультрафіолетове опромінення для знищення вірусів.</p>
-            <p>Ми можемо допомогти, обираючи екологічні миючі засоби та зменшуючи споживання води в побуті.</p>
-        </div>
-    </section>
-
-    <section id="testSection">
-        <div class="glass-card">
-            <h2>Перевірка знань</h2>
-            <div class="progress-container"><div class="progress-bar" id="pBar"></div></div>
-            
-            <div id="quiz">
-                <div class="test-box active" id="q1">
-                    <h3>1. Яка основна небезпека фосфатів?</h3>
-                    <button class="option-btn" onclick="nextQ(1, true)">Викликають цвітіння води</button>
-                    <button class="option-btn" onclick="nextQ(1, false)">Змінюють колір піску</button>
-                    <button class="option-btn" onclick="nextQ(1, false)">Роблять воду занадто солоною</button>
-                </div>
-                <div class="test-box" id="q2">
-                    <h3>2. Що таке стічні води?</h3>
-                    <button class="option-btn" onclick="nextQ(2, true)">Вода після використання людиною</button>
-                    <button class="option-btn" onclick="nextQ(2, false)">Чиста джерельна вода</button>
-                    <button class="option-btn" onclick="nextQ(2, false)">Морські припливи</button>
-                </div>
-                <div class="test-box" id="q3">
-                    <h3>3. Які стоки містять важкі метали?</h3>
-                    <button class="option-btn" onclick="nextQ(3, false)">Тільки дощові</button>
-                    <button class="option-btn" onclick="nextQ(3, true)">Промислові</button>
-                    <button class="option-btn" onclick="nextQ(3, false)">Побутові</button>
-                </div>
-                <div class="test-box" id="q4">
-                    <h3>4. Що гине у водоймах через брак кисню?</h3>
-                    <button class="option-btn" onclick="nextQ(4, true)">Риби та живі організми</button>
-                    <button class="option-btn" onclick="nextQ(4, false)">Каміння на дні</button>
-                    <button class="option-btn" onclick="nextQ(4, false)">Тільки водорості</button>
-                </div>
-                <div class="test-box" id="q5">
-                    <h3>5. Скільки етапів очистки згадано в проекті?</h3>
-                    <button class="option-btn" onclick="nextQ(5, false)">Лише один</button>
-                    <button class="option-btn" onclick="nextQ(5, true)">Три (Мех., Біо., Хім.)</button>
-                    <button class="option-btn" onclick="nextQ(5, false)">П'ять</button>
-                </div>
-                <div class="test-box" id="q6">
-                    <h3>6. Який відсоток стоків не очищується у світі?</h3>
-                    <button class="option-btn" onclick="nextQ(6, false)">Менше 5%</button>
-                    <button class="option-btn" onclick="nextQ(6, false)">Близько 20%</button>
-                    <button class="option-btn" onclick="nextQ(6, true)">Понад 80%</button>
-                </div>
-
-                <div id="result" class="test-box">
-                    <h3>Чудова робота!</h3>
-                    <p id="scoreText" style="text-align: center; font-size: 1.5rem;"></p>
-                    <button class="option-btn" onclick="location.reload()">Пройти ще раз</button>
+            <div class="author-wrapper">
+                <div class="authors">
+                    <div class="author-card"><span>Розробник:</span><strong>Роман Бабельський</strong></div>
+                    <div class="author-card"><span>Контент:</span><strong>Матвій Смольницький</strong></div>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
 
-    <section>
-        <div class="glass-card">
-            <h1>Проєкт завершено</h1>
-            <p>Пам'ятайте, що кожна дія має значення. Разом ми можемо зберегти наші водойми для майбутніх поколінь.</p>
-            <div class="footer-info">
-                <p style="text-align: center;">Розробник: <strong>Роман Бабельський</strong></p>
-                <p style="text-align: center;">Контент: <strong>Матвій Смольницький</strong></p>
+        <section id="s2">
+            <div class="content-box">
+                <div class="text-side">
+                    <h2>Глобальна проблема</h2>
+                    <p>Забруднення <span class="highlight">стічними водами</span> — це невидима катастрофа, яка руйнує екосистеми зсередини. Кожного дня тонни відпрацьованої води потрапляють у природні водойми, несучи в собі складний коктейль із бактерій, хімікатів та твердих відходів.</p>
+                    <p>Побутові стоки, незважаючи на їх "звичність", є джерелом небезпечних органічних сполук. Коли ці речовини потрапляють у річку без належної фільтрації, вони стають початком ланцюгової реакції деградації води, що призводить до її повного перетворення на мертве середовище.</p>
+                </div>
+                <div class="image-side">
+                    <img src="img/pollution1.jpg" alt="Забруднення">
+                </div>
             </div>
-        </div>
-    </section>
+        </section>
+
+        <section id="s3">
+            <div class="content-box" style="flex-direction: column; text-align: center;">
+                <h2>Масштаб катастрофи</h2>
+                <p>Натисніть на плеєр, щоб побачити, як забруднення поширюється у воді.</p>
+                <div class="video-placeholder" id="vPlayer">
+                    <span id="vLabel">▶ ВІДТВОРИТИ ВІДЕО</span>
+                    <video id="myVid" style="display:none; width:100%; height:100%; object-fit: cover;">
+                        <source src="video/waste.mp4" type="video/mp4">
+                    </video>
+                </div>
+            </div>
+        </section>
+
+        <section id="s4">
+            <div class="content-box" style="flex-direction: column;">
+                <div style="text-align: center;">
+                    <h2>Джерела забруднення</h2>
+                    <p>Стічні води мають різне походження, і кожен тип несе свою унікальну загрозу.</p>
+                </div>
+                <div class="grid-info">
+                    <div class="info-item" onclick="toggleCenter(this)">
+                        <h3>Промисловість</h3>
+                        <p>Заводи та фабрики скидають воду з важкими металами.</p>
+                        <div class="extra-info">Ртуть, свинець та кадмій накопичуються в організмах риб, що робить їх небезпечними для людини.</div>
+                    </div>
+                    <div class="info-item" onclick="toggleCenter(this)">
+                        <h3>Побутові стоки</h3>
+                        <p>Вода з наших домівок, наповнена фосфатами.</p>
+                        <div class="extra-info">Миючі засоби стимулюють ріст водоростей, які поглинають весь кисень у водоймах.</div>
+                    </div>
+                    <div class="info-item" onclick="toggleCenter(this)">
+                        <h3>Сільське госп.</h3>
+                        <p>Змиви з полів, що містять азотні добрива.</p>
+                        <div class="extra-info">Нітрати потрапляють у річки після дощів, викликаючи вибуховий ріст мікроорганізмів.</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="s5">
+            <div class="content-box">
+                <div class="image-side">
+                    <img src="img/phosphate.jpg" alt="Фосфати">
+                </div>
+                <div class="text-side">
+                    <h2>Вбивця кисню: Фосфати</h2>
+                    <p>Фосфор — це ідеальне паливо для синьо-зелених водоростей. Коли він потрапляє у воду через каналізацію, водорості починають розмножуватися так швидко, що перетворюють річку на зелене болото.</p>
+                    <p>Цей процес називається <span class="highlight">евтрофікацією</span>. Гниючи, водорості забирають весь кисень, через що риба буквально задихається. Крім того, деякі бактерії виділяють токсини, небезпечні навіть для людей.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="quiz-section visible" id="q1" data-q="1">
+            <div class="quiz-container">
+                <h2>Питання 1/6</h2>
+                <p style="font-size: 1.4rem;">Яка речовина з порошків найбільше шкодить річкам?</p>
+                <div class="options-grid">
+                    <button class="option-btn" onclick="checkAnswer(this, false, 'Ні, сода майже не впливає на ріст водоростей.')">Харчова сода</button>
+                    <button class="option-btn" data-correct="true" onclick="checkAnswer(this, true, 'Вірно! Фосфати стимулюють цвітіння води.')">Фосфати</button>
+                    <button class="option-btn" onclick="checkAnswer(this, false, 'Ароматизатори дають запах, але не вбивають річку.')">Ароматизатори</button>
+                    <button class="option-btn" onclick="checkAnswer(this, false, 'Сіль не є причиною цвітіння прісних річок.')">Кухонна сіль</button>
+                </div>
+                <div class="feedback-box"></div>
+                <div class="scroll-hint">Гортай вниз ↓</div>
+            </div>
+        </section>
+
+        <section class="quiz-section" id="q2" data-q="2">
+            <div class="quiz-container">
+                <h2>Питання 2/6</h2>
+                <p style="font-size: 1.4rem;">Як називається процес надмірного насичення води добривами?</p>
+                <div class="options-grid">
+                    <button class="option-btn" data-correct="true" onclick="checkAnswer(this, true, 'Саме так! Евтрофікація веде до загибелі водойми.')">Евтрофікація</button>
+                    <button class="option-btn" onclick="checkAnswer(this, false, 'Фільтрація — це процес очищення, а не забруднення.')">Фільтрація</button>
+                    <button class="option-btn" onclick="checkAnswer(this, false, 'Гідратація — це просто насичення водою.')">Гідратація</button>
+                    <button class="option-btn" onclick="checkAnswer(this, false, 'Ізоляція тут ні до чого.')">Ізоляція</button>
+                </div>
+                <div class="feedback-box"></div>
+                <div class="scroll-hint">Гортай вниз ↓</div>
+            </div>
+        </section>
+
+        <section class="quiz-section" id="q3" data-q="3">
+            <div class="quiz-container">
+                <h2>Питання 3/6</h2>
+                <p style="font-size: 1.4rem;">Чому риба гине під час сильного цвітіння води?</p>
+                <div class="options-grid">
+                    <button class="option-btn" onclick="checkAnswer(this, false, 'Риба зазвичай не їсть ці бактерії.')">Вона їх переїдає</button>
+                    <button class="option-btn" onclick="checkAnswer(this, false, 'Вода стає теплішою, але не це головна причина.')">Від холоду</button>
+                    <button class="option-btn" data-correct="true" onclick="checkAnswer(this, true, 'Правильно. Гниючі водорості поглинають весь кисень.')">Брак кисню</button>
+                    <button class="option-btn" onclick="checkAnswer(this, false, 'Світло важливе для рослин, а не для дихання риб.')">Забагато світла</button>
+                </div>
+                <div class="feedback-box"></div>
+                <div class="scroll-hint">Гортай вниз ↓</div>
+            </div>
+        </section>
+
+        <section class="quiz-section" id="q4" data-q="4">
+            <div class="quiz-container">
+                <h2>Питання 4/6</h2>
+                <p style="font-size: 1.4rem;">Який метод очистки використовує бактерії для переробки бруду?</p>
+                <div class="options-grid">
+                    <button class="option-btn" onclick="checkAnswer(this, false, 'Механічний — це просто сітки та відстійники.')">Механічний</button>
+                    <button class="option-btn" data-correct="true" onclick="checkAnswer(this, true, 'Вірно! Біологічна очистка — найнатуральніша.')">Біологічний</button>
+                    <button class="option-btn" onclick="checkAnswer(this, false, 'Термічний — це нагрівання.')">Термічний</button>
+                    <button class="option-btn" onclick="checkAnswer(this, false, 'Магнітний метод не використовується масово.')">Магнітний</button>
+                </div>
+                <div class="feedback-box"></div>
+                <div class="scroll-hint">Гортай вниз ↓</div>
+            </div>
+        </section>
+
+        <section class="quiz-section" id="q5" data-q="5">
+            <div class="quiz-container">
+                <h2>Питання 5/6</h2>
+                <p style="font-size: 1.4rem;">Що кожен може зробити для чистоти річок?</p>
+                <div class="options-grid">
+                    <button class="option-btn" onclick="checkAnswer(this, false, 'Це лише збільшить обсяг стічних вод.')">Мити посуд довше</button>
+                    <button class="option-btn" data-correct="true" onclick="checkAnswer(this, true, 'Так! Безфосфатна хімія — ключ до чистої води.')">Купувати безфосфатні засоби</button>
+                    <button class="option-btn" onclick="checkAnswer(this, false, 'Це не вирішує проблему хімічного складу стоків.')">Викидати сміття в унітаз</button>
+                    <button class="option-btn" onclick="checkAnswer(this, false, 'Фосфати шкодять навіть у холодній воді.')">Прати тільки вночі</button>
+                </div>
+                <div class="feedback-box"></div>
+                <div class="scroll-hint">Гортай вниз ↓</div>
+            </div>
+        </section>
+
+        <section class="quiz-section" id="q6" data-q="6">
+            <div class="quiz-container">
+                <h2>Питання 6/6</h2>
+                <p style="font-size: 1.4rem;">Чи рятує кип'ятіння воду від токсинів синьо-зелених водоростей?</p>
+                <div class="options-grid">
+                    <button class="option-btn" onclick="checkAnswer(this, false, 'На жаль, це міф.')">Так, повністю</button>
+                    <button class="option-btn" data-correct="true" onclick="checkAnswer(this, true, 'Правильно. Багато токсинів термостійкі.')">Ні, вони не руйнуються</button>
+                    <button class="option-btn" onclick="checkAnswer(this, false, 'Тільки якщо кип\'ятити 5 годин (це не так).')">Тільки дуже довге</button>
+                    <button class="option-btn" onclick="checkAnswer(this, false, 'Тільки з додаванням солі.')">Тільки з сіллю</button>
+                </div>
+                <div class="feedback-box"></div>
+                <div class="scroll-hint">Фінал презентації ↓</div>
+            </div>
+        </section>
+
+        <section class="quiz-section" id="final-slide" style="display:none; text-align: center;">
+            <div class="hero-title-wrap">
+                <h1 style="font-size: 3rem;">Дякуємо за увагу!</h1>
+                <p style="margin-top: 20px;">Розробник: <strong>Роман Бабельський</strong></p>
+                <p>Контент: <strong>Матвій Смольницький</strong></p>
+            </div>
+            <button class="restart-btn" style="margin-top: 40px; padding: 15px 40px; border: 1px solid var(--accent); background: transparent; color: var(--accent); border-radius: 50px; cursor: pointer;" onclick="location.reload()">До початку</button>
+        </section>
+    </div>
 
     <script>
-        // ВІДЕО
-        const videoCont = document.getElementById('mainVideo');
-        const overlay = document.getElementById('videoOverlay');
-        const video = document.getElementById('videoElement');
-        const label = document.getElementById('playLabel');
+        // БУЛЬБАШКИ
+        function createBubbles() {
+            const container = document.getElementById('bubbles');
+            for(let i = 0; i < 20; i++) {
+                const bubble = document.createElement('div');
+                bubble.className = 'bubble';
+                const size = Math.random() * 15 + 5 + 'px';
+                bubble.style.width = size; bubble.style.height = size;
+                bubble.style.left = Math.random() * 100 + '%';
+                bubble.style.animationDelay = Math.random() * 10 + 's';
+                container.appendChild(bubble);
+            }
+        }
+        createBubbles();
 
-        videoCont.addEventListener('click', () => {
-            if(!videoCont.classList.contains('active')) {
-                videoCont.classList.add('active');
+        // ІНТЕРАКТИВ КАРТОК
+        function toggleCenter(element) {
+            const isCentered = element.classList.contains('centered');
+            document.querySelectorAll('.info-item').forEach(item => item.classList.remove('centered'));
+            if (!isCentered) element.classList.add('centered');
+        }
+
+        // ВІДЕО СИСТЕМА
+        const player = document.getElementById('vPlayer');
+        const video = document.getElementById('myVid');
+        const overlay = document.getElementById('vOverlay');
+        const label = document.getElementById('vLabel');
+
+        player.addEventListener('click', () => {
+            if (!player.classList.contains('centered-video')) {
+                player.classList.add('centered-video');
                 overlay.style.display = 'block';
                 video.style.display = 'block';
                 label.style.display = 'none';
@@ -236,7 +428,7 @@
         });
 
         video.onended = () => {
-            videoCont.classList.remove('active');
+            player.classList.remove('centered-video');
             overlay.style.display = 'none';
             video.style.display = 'none';
             label.style.display = 'block';
@@ -244,39 +436,40 @@
         };
 
         // ТЕСТИ
-        let score = 0;
-        const total = 6;
-
-        function nextQ(current, isCorrect) {
-            if(isCorrect) score++;
-            document.getElementById(`q${current}`).classList.remove('active');
-            
-            let prog = (current / total) * 100;
-            document.getElementById('pBar').style.width = prog + '%';
-
-            if(current < total) {
-                document.getElementById(`q${current + 1}`).classList.add('active');
-            } else {
-                document.getElementById('result').classList.add('active');
-                document.getElementById('scoreText').innerText = `Ви відповіли правильно на ${score} з ${total} питань!`;
-            }
-        }
-
-        // ЛІЧИЛЬНИК
-        const obs = new IntersectionObserver((entries) => {
-            entries.forEach(e => {
-                if(e.isIntersecting) {
-                    let c = 0;
-                    const target = 250000;
-                    const timer = setInterval(() => {
-                        c += 4166; 
-                        document.getElementById('litersCounter').innerText = c.toLocaleString();
-                        if(c >= target) clearInterval(timer);
-                    }, 30);
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    // Показуємо перше питання після слайдів з інфою
+                    if(entry.target.id === 's5') {
+                        setTimeout(() => { document.getElementById('q1').style.display = 'flex'; }, 500);
+                    }
                 }
             });
         }, { threshold: 0.5 });
-        obs.observe(document.getElementById('counterSlide'));
+        document.querySelectorAll('section').forEach(s => observer.observe(s));
+
+        function checkAnswer(btn, isCorrect, explanation) {
+            document.getElementById('quiz-progress-bar').style.display = 'block';
+            const parent = btn.closest('.quiz-section');
+            const feedback = parent.querySelector('.feedback-box');
+            const btns = parent.querySelectorAll('.option-btn');
+            
+            btns.forEach(b => b.disabled = true);
+            btn.classList.add(isCorrect ? 'correct' : 'wrong');
+            
+            feedback.innerHTML = `<h3>${isCorrect ? 'Правильно!' : 'Помилка...'}</h3><p>${explanation}</p>`;
+            feedback.style.display = 'block';
+            parent.querySelector('.scroll-hint').style.display = 'block';
+            
+            const qNum = parseInt(parent.dataset.q);
+            if (qNum < 6) {
+                document.getElementById(`q${qNum + 1}`).style.display = 'flex';
+            } else {
+                document.getElementById('final-slide').style.display = 'flex';
+            }
+            document.getElementById('quiz-progress-bar').style.width = (qNum / 6) * 100 + '%';
+        }
     </script>
 </body>
 </html>
