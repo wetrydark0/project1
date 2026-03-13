@@ -21,7 +21,6 @@
             scroll-behavior: smooth;
         }
 
-        /* Блокування скролу (вмикається через JS) */
         .no-scroll { overflow: hidden !important; scroll-snap-type: none !important; }
 
         body {
@@ -31,7 +30,6 @@
             overflow-x: hidden;
         }
 
-        /* Анімований фон */
         .bg-glow {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: radial-gradient(circle at 50% 50%, #1a2c07 0%, #05070a 100%);
@@ -54,20 +52,16 @@
             position: relative;
         }
 
-        /* ТИПОГРАФІКА */
         h1 {
             font-family: 'Montserrat', sans-serif;
-            font-size: clamp(3rem, 12vw, 10rem);
-            line-height: 0.85; text-transform: uppercase;
+            line-height: 0.9; text-transform: uppercase;
             background: linear-gradient(to bottom, #fff 40%, var(--primary));
             -webkit-background-clip: text; -webkit-text-fill-color: transparent;
         }
 
         h2 { font-size: 3rem; margin-bottom: 30px; color: var(--primary); text-transform: uppercase; }
-
         .big-text { font-size: 1.5rem; color: #a0a0a0; max-width: 800px; line-height: 1.6; }
 
-        /* КАРТКИ */
         .grid {
             display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px;
             margin-top: 50px;
@@ -87,7 +81,6 @@
 
         .stat-num { font-size: 4rem; font-weight: 900; color: var(--primary); display: block; }
 
-        /* ВІДЕО */
         .v-wrap {
             width: 100%; border-radius: 30px; overflow: hidden;
             border: 1px solid var(--primary); position: relative;
@@ -95,16 +88,12 @@
         }
         video { width: 100%; display: block; }
 
-        /* ТЕСТОВА ЗОНА */
-        #quiz-trigger { background: var(--primary); color: #000; padding: 20px 40px; border-radius: 50px; font-weight: 800; cursor: pointer; border: none; font-size: 1.2rem; }
-        
         .quiz-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: var(--bg); z-index: 2000;
             display: none; flex-direction: column; align-items: center; justify-content: center;
             padding: 40px;
         }
-
         .q-box { max-width: 700px; text-align: center; }
         .opt-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 40px; width: 100%; }
         .opt-btn {
@@ -117,8 +106,13 @@
         .opt-btn.wrong { background: #ff4d4d; border-color: #ff4d4d; }
 
         .progress-bar {
-            position: fixed; bottom: 0; left: 0; height: 10px;
-            background: var(--primary); width: 0%; z-index: 3000; transition: 0.5s;
+            position: fixed; bottom: 0; left: 0; height: 8px;
+            background: var(--primary); width: 0%; z-index: 3000; transition: 0.3s;
+        }
+
+        #quiz-trigger {
+            background: var(--primary); color: #000; padding: 20px 40px; 
+            border-radius: 50px; font-weight: 800; cursor: pointer; border: none; font-size: 1.2rem;
         }
 
     </style>
@@ -130,11 +124,20 @@
     <div class="progress-bar" id="progressBar"></div>
 
     <section>
-        <p style="letter-spacing: 5px; color: var(--primary); font-weight: 800;">UA / ECO / 2026</p>
-        <h1>МЕРТВА<br>ВОДА.</h1>
-        <p class="big-text">Дослідження впливу фосфатів та стічних вод на екосистеми України. Повний аналіз катастрофи та методи її подолання.</p>
-        <div style="margin-top: 40px; opacity: 0.6;">
-            РОЗРОБНИК: РОМАН БАБЕЛЬСЬКИЙ | КОНТЕНТ: МАТВІЙ СМОЛЬНИЦЬКИЙ
+        <h1 style="font-size: clamp(2.5rem, 7vw, 5rem); margin-bottom: 50px;">
+            ЗАБРУДНЕННЯ<br><span style="color: var(--primary)">СТІЧНИХ ВОД.</span>
+        </h1>
+        
+        <div style="display: flex; gap: 20px; flex-wrap: wrap;">
+            <div style="border: 1px solid var(--primary); padding: 12px 24px; border-radius: 15px; background: rgba(180, 255, 57, 0.05); backdrop-filter: blur(10px);">
+                <span style="font-size: 0.75rem; color: var(--primary); display: block; text-transform: uppercase; margin-bottom: 5px; opacity: 0.8; font-weight: 800;">Розробник</span>
+                <strong style="letter-spacing: 1px; font-size: 1.1rem;">РОМАН БАБЕЛЬСЬКИЙ</strong>
+            </div>
+            
+            <div style="border: 1px solid rgba(255,255,255,0.2); padding: 12px 24px; border-radius: 15px; background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(10px);">
+                <span style="font-size: 0.75rem; color: #a0a0a0; display: block; text-transform: uppercase; margin-bottom: 5px; opacity: 0.8; font-weight: 800;">Контент</span>
+                <strong style="letter-spacing: 1px; font-size: 1.1rem;">МАТВІЙ СМОЛЬНИЦЬКИЙ</strong>
+            </div>
         </div>
     </section>
 
@@ -151,7 +154,7 @@
             </div>
             <div class="glass-card">
                 <span class="stat-num">1.5м</span>
-                <p>тонн риби гине щороку через дефіцит кисню, викликаний цвітінням синьо-зелених водоростей.</p>
+                <p>тонн риби гине щороку через дефіцит кисню, викликаний цвітінням води.</p>
             </div>
         </div>
     </section>
@@ -175,23 +178,19 @@
     </section>
 
     <section>
-        <h2>Як ми можемо це зупинити?</h2>
+        <h2>Технології очищення</h2>
         <div class="grid">
             <div class="glass-card">
                 <h3>Механіка</h3>
-                <p>Використання гравітаційних відстійників та центрифуг для видалення твердих часток.</p>
+                <p>Використання гравітаційних відстійників для видалення твердих часток.</p>
             </div>
             <div class="glass-card">
                 <h3>Біо-реактори</h3>
-                <p>Застосування аеротентів з примусовою подачею кисню для стимуляції бактерій очищувачів.</p>
+                <p>Застосування аеротентів з примусовою подачею кисню для стимуляції бактерій.</p>
             </div>
             <div class="glass-card">
                 <h3>УФ-Бар'єр</h3>
                 <p>Остаточне знищення вірусів без використання шкідливого хлору.</p>
-            </div>
-            <div class="glass-card">
-                <h3>Мембрани</h3>
-                <p>Ультрафільтрація, що здатна затримувати навіть молекули ліків та мікропластик.</p>
             </div>
         </div>
     </section>
@@ -207,20 +206,19 @@
 
     <section id="quiz-anchor">
         <div style="text-align: center;">
-            <h1 style="font-size: 5rem;">ФІНАЛЬНИЙ<br>КОНТРОЛЬ</h1>
-            <p class="big-text" style="margin: 20px auto;">Для завершення перегляду та доступу до висновків, необхідно пройти повний тест без помилок.</p>
+            <h1 style="font-size: 4rem;">КОНТРОЛЬ<br>ЗНАНЬ</h1>
+            <p class="big-text" style="margin: 20px auto;">Для доступу до фінального слайда необхідно пройти тест.</p>
             <button id="quiz-trigger" onclick="startQuiz()">РОЗПОЧАТИ ТЕСТУВАННЯ</button>
         </div>
     </section>
 
     <div class="quiz-overlay" id="qOverlay">
-        <div class="q-box" id="qContent">
-            </div>
+        <div class="q-box" id="qContent"></div>
     </div>
 
     <section id="final-slide">
         <h1>МАЙБУТНЄ<br>ЗА НАМИ.</h1>
-        <p class="big-text">Ви пройшли повний курс моніторингу. Тепер ви знаєте правду. Поділіться цим з іншими.</p>
+        <p class="big-text">Ви пройшли повний курс моніторингу. Зробимо воду чистою разом.</p>
         <button id="quiz-trigger" style="margin-top: 50px;" onclick="location.reload()">ПЕРЕЗАПУСТИТИ</button>
     </section>
 
@@ -246,7 +244,7 @@
             const data = questions[curQ];
             const html = `
                 <p style="color: var(--primary); font-weight: 800; margin-bottom: 10px;">ПИТАННЯ ${curQ + 1} / 6</p>
-                <h2>${data.q}</h2>
+                <h2 style="font-size: 2.5rem;">${data.q}</h2>
                 <div class="opt-grid">
                     ${data.a.map((opt, i) => `<button class="opt-btn" onclick="checkAns(${i})">${opt}</button>`).join('')}
                 </div>
@@ -265,17 +263,16 @@
                     } else {
                         finishQuiz();
                     }
-                }, 1000);
+                }, 800);
             } else {
                 btns[idx].classList.add('wrong');
-                setTimeout(() => renderQuestion(), 1000);
+                setTimeout(() => renderQuestion(), 800);
             }
         }
 
         function finishQuiz() {
             document.getElementById('qOverlay').style.display = 'none';
             document.body.classList.remove('no-scroll');
-            window.location.hash = "final-slide";
             document.getElementById('final-slide').scrollIntoView();
         }
 
