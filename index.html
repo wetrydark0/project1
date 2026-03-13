@@ -35,14 +35,8 @@
             background: radial-gradient(circle at 50% 50%, #1a2c07 0%, #05070a 100%);
             z-index: -2;
         }
-        .blob {
-            position: fixed; width: 500px; height: 500px;
-            background: var(--primary); filter: blur(150px);
-            opacity: 0.1; border-radius: 50%; z-index: -1;
-            animation: move 20s infinite alternate;
-        }
-        @keyframes move { from { transform: translate(-20%, -20%); } to { transform: translate(50%, 50%); } }
 
+        /* СТИЛІ СЛАЙДІВ */
         section {
             min-height: 100vh; width: 100%;
             padding: 5% 10%;
@@ -50,6 +44,7 @@
             justify-content: center;
             scroll-snap-align: center;
             position: relative;
+            transition: opacity 0.5s ease, filter 0.5s ease;
         }
 
         h1 {
@@ -59,170 +54,224 @@
             -webkit-background-clip: text; -webkit-text-fill-color: transparent;
         }
 
-        h2 { font-size: 3rem; margin-bottom: 30px; color: var(--primary); text-transform: uppercase; }
-        .big-text { font-size: 1.5rem; color: #a0a0a0; max-width: 800px; line-height: 1.6; }
+        h2 { font-size: 2.5rem; margin-bottom: 30px; color: var(--primary); text-transform: uppercase; }
 
+        /* СІТКА КАРТОК */
         .grid {
-            display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px;
-            margin-top: 50px;
+            display: grid; 
+            grid-template-columns: repeat(3, 1fr); 
+            gap: 20px;
+            margin-top: 20px;
         }
+
         .glass-card {
             background: var(--card);
             backdrop-filter: blur(15px);
             border: 1px solid rgba(255,255,255,0.1);
-            padding: 40px; border-radius: 24px;
-            transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            padding: 25px; border-radius: 20px;
+            cursor: pointer;
+            transition: 0.3s ease;
+            position: relative;
         }
-        .glass-card:hover {
+
+        .glass-card:hover { border-color: var(--primary); transform: translateY(-5px); }
+        
+        .stat-num { font-size: 2.5rem; font-weight: 900; color: var(--primary); display: block; margin-bottom: 10px; }
+        .card-desc { font-size: 0.9rem; color: #ccc; }
+        .full-info { display: none; margin-top: 20px; font-size: 1rem; line-height: 1.6; color: #fff; }
+
+        /* МОДАЛЬНИЙ СТАН КАРТКИ */
+        .glass-card.active {
+            position: fixed;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%) scale(1.1);
+            width: 80%; max-width: 800px;
+            z-index: 5000;
+            background: #0a0f14;
             border-color: var(--primary);
-            transform: scale(1.05);
-            background: rgba(180, 255, 57, 0.05);
+            box-shadow: 0 0 100px rgba(180, 255, 57, 0.3);
+            cursor: default;
+        }
+        .glass-card.active .full-info { display: block; }
+        .glass-card.active .stat-num { font-size: 4rem; }
+
+        .overlay-dim {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.85);
+            backdrop-filter: blur(10px);
+            z-index: 4000;
+            display: none;
+            opacity: 0; transition: 0.5s;
         }
 
-        .stat-num { font-size: 4rem; font-weight: 900; color: var(--primary); display: block; }
-
-        .v-wrap {
-            width: 100%; border-radius: 30px; overflow: hidden;
-            border: 1px solid var(--primary); position: relative;
-            box-shadow: 0 0 50px rgba(180, 255, 57, 0.2);
+        /* ПРОГРЕС БАР */
+        .progress-bar {
+            position: fixed; bottom: 0; left: 0; height: 6px;
+            background: var(--primary); width: 0%; z-index: 3000;
         }
-        video { width: 100%; display: block; }
+
+        /* КНОПКА ТЕСТУ */
+        #quiz-trigger {
+            background: var(--primary); color: #000; padding: 18px 36px; 
+            border-radius: 50px; font-weight: 800; cursor: pointer; border: none;
+        }
 
         .quiz-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: var(--bg); z-index: 2000;
+            background: var(--bg); z-index: 6000;
             display: none; flex-direction: column; align-items: center; justify-content: center;
-            padding: 40px;
         }
-        .q-box { max-width: 700px; text-align: center; }
-        .opt-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 40px; width: 100%; }
-        .opt-btn {
-            background: transparent; border: 2px solid rgba(255,255,255,0.2);
-            padding: 20px; color: #fff; border-radius: 15px; cursor: pointer;
-            font-family: inherit; font-size: 1.1rem; transition: 0.3s;
-        }
-        .opt-btn:hover { border-color: var(--primary); background: rgba(180, 255, 57, 0.1); }
-        .opt-btn.correct { background: #00ff88; color: #000; border-color: #00ff88; }
-        .opt-btn.wrong { background: #ff4d4d; border-color: #ff4d4d; }
-
-        .progress-bar {
-            position: fixed; bottom: 0; left: 0; height: 8px;
-            background: var(--primary); width: 0%; z-index: 3000; transition: 0.3s;
-        }
-
-        #quiz-trigger {
-            background: var(--primary); color: #000; padding: 20px 40px; 
-            border-radius: 50px; font-weight: 800; cursor: pointer; border: none; font-size: 1.2rem;
-        }
+        .opt-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 30px; width: 100%; max-width: 600px; }
+        .opt-btn { background: transparent; border: 1px solid #444; padding: 15px; color: #fff; border-radius: 10px; cursor: pointer; }
+        .opt-btn.correct { background: #00ff88; color: #000; }
+        .opt-btn.wrong { background: #ff4d4d; }
 
     </style>
 </head>
 <body>
 
     <div class="bg-glow"></div>
-    <div class="blob"></div>
+    <div class="overlay-dim" id="dimmer" onclick="closeAllCards()"></div>
     <div class="progress-bar" id="progressBar"></div>
 
-    <section>
+    <section id="s1">
         <h1 style="font-size: clamp(2.5rem, 7vw, 5rem); margin-bottom: 50px;">
             ЗАБРУДНЕННЯ<br><span style="color: var(--primary)">СТІЧНИХ ВОД.</span>
         </h1>
-        
         <div style="display: flex; gap: 20px; flex-wrap: wrap;">
-            <div style="border: 1px solid var(--primary); padding: 12px 24px; border-radius: 15px; background: rgba(180, 255, 57, 0.05); backdrop-filter: blur(10px);">
-                <span style="font-size: 0.75rem; color: var(--primary); display: block; text-transform: uppercase; margin-bottom: 5px; opacity: 0.8; font-weight: 800;">Розробник</span>
-                <strong style="letter-spacing: 1px; font-size: 1.1rem;">РОМАН БАБЕЛЬСЬКИЙ</strong>
+            <div style="border: 1px solid var(--primary); padding: 12px 24px; border-radius: 15px; background: rgba(180, 255, 57, 0.05);">
+                <span style="font-size: 0.75rem; color: var(--primary); display: block; text-transform: uppercase;">Розробник</span>
+                <strong>РОМАН БАБЕЛЬСЬКИЙ</strong>
             </div>
-            
-            <div style="border: 1px solid rgba(255,255,255,0.2); padding: 12px 24px; border-radius: 15px; background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(10px);">
-                <span style="font-size: 0.75rem; color: #a0a0a0; display: block; text-transform: uppercase; margin-bottom: 5px; opacity: 0.8; font-weight: 800;">Контент</span>
-                <strong style="letter-spacing: 1px; font-size: 1.1rem;">МАТВІЙ СМОЛЬНИЦЬКИЙ</strong>
+            <div style="border: 1px solid rgba(255,255,255,0.2); padding: 12px 24px; border-radius: 15px; background: rgba(255, 255, 255, 0.05);">
+                <span style="font-size: 0.75rem; color: #a0a0a0; display: block; text-transform: uppercase;">Контент</span>
+                <strong>МАТВІЙ СМОЛЬНИЦЬКИЙ</strong>
             </div>
         </div>
     </section>
 
-    <section>
+    <section id="s2">
         <h2>Цифри катастрофи</h2>
         <div class="grid">
-            <div class="glass-card">
+            <div class="glass-card" onclick="openCard(this, event)">
                 <span class="stat-num">3800</span>
-                <p>тонн фосфатів щорічно потрапляє у Дніпро через застарілі мийні засоби.</p>
+                <p class="card-desc">тонн фосфатів щорічно потрапляє у Дніпро через застарілі мийні засоби.</p>
+                <div class="full-info">
+                    Це критичний показник, який щороку зростає через відсутність законодавчих обмежень на використання фосфатних засобів. Фосфати діють як надпотужне добриво для синьо-зелених водоростей, провокуючи їх вибухове розмноження. Один грам цієї речовини здатен викликати ріст десяти кілограмів біомаси, яка згодом гниє на дні. Величезна кількість цих сполук потрапляє в річку навіть після муніципальних очисних споруд, які не пристосовані для їх вилучення. В результаті ми отримуємо екологічну бомбу сповільненої дії в головній артерії країни.
+                </div>
             </div>
-            <div class="glass-card">
+            <div class="glass-card" onclick="openCard(this, event)">
                 <span class="stat-num">90%</span>
-                <p>очисних споруд в Україні потребують негайної модернізації або повної заміни.</p>
+                <p class="card-desc">очисних споруд в Україні потребують негайної модернізації.</p>
+                <div class="full-info">
+                    Більшість очисних систем були побудовані ще за радянських часів і розраховані на зовсім інші хімічні навантаження. Сучасні пральні порошки та промислові відходи містять сполуки, які ці старі фільтри просто не «бачать». Через зношеність обладнання часто трапляються аварійні скиди неочищених стоків прямо у відкриті водойми. Модернізація вимагає мільярдних інвестицій, проте без неї ми ризикуємо втратити питну воду вже у найближче десятиліття. Станціям очищення критично не вистачає блоків для хімічного та мембранного видалення мікрочастинок.
+                </div>
             </div>
-            <div class="glass-card">
+            <div class="glass-card" onclick="openCard(this, event)">
                 <span class="stat-num">1.5м</span>
-                <p>тонн риби гине щороку через дефіцит кисню, викликаний цвітінням води.</p>
+                <p class="card-desc">тонн риби гине щороку через дефіцит кисню у воді.</p>
+                <div class="full-info">
+                    Масова загибель водних мешканців є прямим наслідком евтрофікації — процесу «задухи» річки. Коли водорості відмирають, процес їхнього розкладання поглинає практично весь розчинений у воді кисень. Риба просто задихається, оскільки їй немає чим дихати в придонних шарах води. Окрім кисневого голодування, водорості виділяють токсини, які паралізують нервову систему водних організмів. Це створює мертві зони, де екосистема не може відновитися роками навіть після припинення викидів.
+                </div>
+            </div>
+            <div class="glass-card" onclick="openCard(this, event)">
+                <span class="stat-num">70%</span>
+                <p class="card-desc">побутових стоків містять небезпечні ПАР (поверхнево-активні речовини).</p>
+                <div class="full-info">
+                    Ці речовини утворюють стійку піну на поверхні води, яка перешкоджає газообміну між атмосферою та річкою. ПАР руйнують захисний шар на лусці риб, роблячи їх вразливими до будь-яких бактерій та паразитів. Навіть у малих концентраціях ці сполуки здатні змінювати гормональний фон водних істот. Вони майже не розкладаються природним шляхом і накопичуються в річковому мулі на десятиліття. Кожне прання звичайним дешевим порошком додає чергову порцію цієї «хімії» у наш спільний водний ресурс.
+                </div>
+            </div>
+            <div class="glass-card" onclick="openCard(this, event)">
+                <span class="stat-num">42</span>
+                <p class="card-desc">види небезпечних бактерій розмножуються у цвілій воді.</p>
+                <div class="full-info">
+                    Цвітіння води створює ідеальне середовище для розвитку патогенних мікроорганізмів, включаючи кишкову паличку. Тепла вода з надлишком органіки стає справжнім інкубатором для хвороб, що небезпечні як для тварин, так і для людей. Під час купання ці бактерії можуть потрапляти на шкіру або слизові оболонки, викликаючи важкі алергічні реакції. Токсини синьо-зелених водоростей (мікроцистини) вражають печінку навіть при випадковому ковтанні кількох крапель. Це робить наші річки непридатними для літнього відпочинку.
+                </div>
+            </div>
+            <div class="glass-card" onclick="openCard(this, event)">
+                <span class="stat-num">120</span>
+                <p class="card-desc">років потрібно на природне очищення закритої водойми від фосфатів.</p>
+                <div class="full-info">
+                    Фосфати мають властивість накопичуватися в донних відкладеннях і повертатися у воду щовесни. Це створює замкнене коло забруднення, яке підтримує цвітіння навіть після повної зупинки скидів. Природне самоочищення — процес надзвичайно повільний і часто неможливий без втручання людини. Для відновлення таких озер потрібні складні методи механічного вилучення мулу або хімічна нейтралізація. Якщо ми не зупинимо забруднення сьогодні, наслідки відчуватимуть кілька наступних поколінь.
+                </div>
             </div>
         </div>
     </section>
 
-    <section>
+    <section id="s3">
         <h2>Фосфатний ланцюг</h2>
         <div class="grid">
-            <div class="glass-card">
-                <h3>Джерело</h3>
-                <p>Побутова хімія, добрива з полів та промислові стоки підприємств без фільтрів.</p>
-            </div>
-            <div class="glass-card">
-                <h3>Реакція</h3>
-                <p>Фосфор стимулює ріст ціанобактерій. 1 грам фосфатів провокує ріст 5-10 кг водоростей.</p>
-            </div>
-            <div class="glass-card" style="border-color: #ff4d4d;">
-                <h3>Наслідок</h3>
-                <p>Виділення мікроцистинів. Це токсини, які не зникають навіть після кип'ятіння води.</p>
-            </div>
+            <div class="glass-card"><h3>Джерело</h3><p>Побутова хімія та промисловість.</p></div>
+            <div class="glass-card"><h3>Реакція</h3><p>Вибухове розмноження водоростей.</p></div>
+            <div class="glass-card" style="border-color: #ff4d4d;"><h3>Наслідок</h3><p>Виділення токсинів мікроцистинів.</p></div>
         </div>
     </section>
 
-    <section>
+    <section id="s4">
         <h2>Технології очищення</h2>
         <div class="grid">
-            <div class="glass-card">
-                <h3>Механіка</h3>
-                <p>Використання гравітаційних відстійників для видалення твердих часток.</p>
-            </div>
-            <div class="glass-card">
-                <h3>Біо-реактори</h3>
-                <p>Застосування аеротентів з примусовою подачею кисню для стимуляції бактерій.</p>
-            </div>
-            <div class="glass-card">
-                <h3>УФ-Бар'єр</h3>
-                <p>Остаточне знищення вірусів без використання шкідливого хлору.</p>
-            </div>
+            <div class="glass-card"><h3>Механіка</h3><p>Фільтрація твердих часток.</p></div>
+            <div class="glass-card"><h3>Біо-реактори</h3><p>Робота корисних бактерій.</p></div>
+            <div class="glass-card"><h3>УФ-Бар'єр</h3><p>Знищення вірусів світлом.</p></div>
         </div>
     </section>
 
-    <section>
-        <h2 style="text-align: center;">ВІЗУАЛІЗАЦІЯ ЗАБРУДНЕННЯ</h2>
-        <div class="v-wrap">
-            <video id="ecoVideo" controls>
-                <source src="video/waste.mp4" type="video/mp4">
-            </video>
-        </div>
+    <section id="s5">
+        <h2 style="text-align: center;">ВІДЕОДОКАЗ</h2>
+        <div class="v-wrap"><video id="ecoVideo" controls><source src="video/waste.mp4" type="video/mp4"></video></div>
     </section>
 
     <section id="quiz-anchor">
         <div style="text-align: center;">
             <h1 style="font-size: 4rem;">КОНТРОЛЬ<br>ЗНАНЬ</h1>
-            <p class="big-text" style="margin: 20px auto;">Для доступу до фінального слайда необхідно пройти тест.</p>
             <button id="quiz-trigger" onclick="startQuiz()">РОЗПОЧАТИ ТЕСТУВАННЯ</button>
         </div>
     </section>
 
-    <div class="quiz-overlay" id="qOverlay">
-        <div class="q-box" id="qContent"></div>
-    </div>
+    <div class="quiz-overlay" id="qOverlay"><div class="q-box" id="qContent"></div></div>
 
     <section id="final-slide">
         <h1>МАЙБУТНЄ<br>ЗА НАМИ.</h1>
-        <p class="big-text">Ви пройшли повний курс моніторингу. Зробимо воду чистою разом.</p>
         <button id="quiz-trigger" style="margin-top: 50px;" onclick="location.reload()">ПЕРЕЗАПУСТИТИ</button>
     </section>
 
     <script>
+        // Логіка карток
+        function openCard(card, event) {
+            if(card.classList.contains('active')) return;
+            event.stopPropagation();
+            
+            // Ховаємо всі інші секції
+            document.querySelectorAll('section').forEach(s => {
+                s.style.opacity = '0';
+                s.style.filter = 'blur(10px)';
+            });
+
+            const dimmer = document.getElementById('dimmer');
+            dimmer.style.display = 'block';
+            setTimeout(() => dimmer.style.opacity = '1', 10);
+            
+            card.classList.add('active');
+            document.body.classList.add('no-scroll');
+        }
+
+        function closeAllCards() {
+            const activeCard = document.querySelector('.glass-card.active');
+            if(!activeCard) return;
+
+            activeCard.classList.remove('active');
+            const dimmer = document.getElementById('dimmer');
+            dimmer.style.opacity = '0';
+            setTimeout(() => dimmer.style.display = 'none', 500);
+
+            document.querySelectorAll('section').forEach(s => {
+                s.style.opacity = '1';
+                s.style.filter = 'blur(0px)';
+            });
+            document.body.classList.remove('no-scroll');
+        }
+
+        // Прогрес та тест (з минулих версій)
         const questions = [
             { q: "Яка речовина є головним 'добривом' для цвітіння води?", a: ["Фосфати", "Сіль", "Кисень", "Залізо"], c: 0 },
             { q: "Скільки кілограмів водоростей провокує 1 г фосфатів?", a: ["100 г", "1 кг", "До 10 кг", "1 тонну"], c: 2 },
@@ -233,48 +282,22 @@
         ];
 
         let curQ = 0;
-
-        function startQuiz() {
-            document.body.classList.add('no-scroll');
-            document.getElementById('qOverlay').style.display = 'flex';
-            renderQuestion();
-        }
-
+        function startQuiz() { document.body.classList.add('no-scroll'); document.getElementById('qOverlay').style.display = 'flex'; renderQuestion(); }
         function renderQuestion() {
             const data = questions[curQ];
-            const html = `
-                <p style="color: var(--primary); font-weight: 800; margin-bottom: 10px;">ПИТАННЯ ${curQ + 1} / 6</p>
-                <h2 style="font-size: 2.5rem;">${data.q}</h2>
-                <div class="opt-grid">
-                    ${data.a.map((opt, i) => `<button class="opt-btn" onclick="checkAns(${i})">${opt}</button>`).join('')}
-                </div>
-            `;
-            document.getElementById('qContent').innerHTML = html;
+            document.getElementById('qContent').innerHTML = `
+                <p style="color:var(--primary); font-weight:800;">ПИТАННЯ ${curQ+1}/6</p>
+                <h2 style="font-size:2rem;">${data.q}</h2>
+                <div class="opt-grid">${data.a.map((opt, i) => `<button class="opt-btn" onclick="checkAns(${i})">${opt}</button>`).join('')}</div>`;
         }
-
         function checkAns(idx) {
             const btns = document.querySelectorAll('.opt-btn');
             if(idx === questions[curQ].c) {
                 btns[idx].classList.add('correct');
-                setTimeout(() => {
-                    curQ++;
-                    if(curQ < questions.length) {
-                        renderQuestion();
-                    } else {
-                        finishQuiz();
-                    }
-                }, 800);
-            } else {
-                btns[idx].classList.add('wrong');
-                setTimeout(() => renderQuestion(), 800);
-            }
+                setTimeout(() => { curQ++; if(curQ < questions.length) renderQuestion(); else finishQuiz(); }, 800);
+            } else { btns[idx].classList.add('wrong'); setTimeout(() => renderQuestion(), 800); }
         }
-
-        function finishQuiz() {
-            document.getElementById('qOverlay').style.display = 'none';
-            document.body.classList.remove('no-scroll');
-            document.getElementById('final-slide').scrollIntoView();
-        }
+        function finishQuiz() { document.getElementById('qOverlay').style.display = 'none'; document.body.classList.remove('no-scroll'); document.getElementById('final-slide').scrollIntoView(); }
 
         window.onscroll = () => {
             const scrolled = (window.scrollY / (document.documentElement.scrollHeight - window.innerHeight)) * 100;
