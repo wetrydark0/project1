@@ -81,9 +81,8 @@
         .stat-num { font-size: 1.8rem; font-weight: 900; color: var(--primary); display: block; margin-bottom: 10px; text-transform: uppercase; }
         .card-desc { font-size: 0.9rem; color: #ccc; }
         .full-info { display: none; margin-top: 20px; font-size: 1.1rem; line-height: 1.6; color: #fff; }
-        .card-img { display: none; width: 100%; border-radius: 15px; margin-top: 20px; object-fit: cover; border: 1px solid var(--primary); }
 
-        /* ВІДКОРИГОВАНИЙ ВИГЛЯД АКТИВНОГО БЛОКУ ЯК НА ФОТО */
+        /* ВІДКРИТИЙ БЛОК */
         .glass-card.active {
             position: fixed;
             top: 50%; left: 50%;
@@ -95,13 +94,10 @@
             cursor: default;
             padding: 60px;
             border-radius: 40px;
-            display: block; /* Повертаємо блочну структуру як на скриншоті */
+            display: block;
             text-align: left;
         }
         
-        .glass-card.active .active-content { display: block; }
-        .glass-card.active .active-media { display: none; } /* Приховуємо медіа для відповідності скриншоту */
-
         .glass-card.active .stat-num { 
             font-family: 'Montserrat', sans-serif;
             font-size: 5.5rem; 
@@ -154,40 +150,76 @@
             background: var(--primary); width: 0%; z-index: 3000;
         }
 
-        #quiz-trigger {
-            background: var(--primary); color: #000; padding: 18px 36px; 
-            border-radius: 50px; font-weight: 800; cursor: pointer; border: none;
-        }
-
+        /* ОБНОВЛЕНІ СТИЛІ ВІКТОРИНИ */
         .quiz-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: var(--bg); z-index: 10000;
+            background: rgba(5, 7, 10, 0.95); z-index: 10000;
             display: none; flex-direction: column; align-items: center; justify-content: center;
-            padding: 20px;
+            padding: 20px; backdrop-filter: blur(15px);
         }
 
         .quiz-card {
-            background: var(--card);
-            padding: 40px; border-radius: 30px;
-            border: 1px solid rgba(255,255,255,0.1);
+            background: rgba(255, 255, 255, 0.03);
+            padding: 50px; border-radius: 35px;
+            border: 1px solid rgba(180, 255, 57, 0.3);
             max-width: 800px; width: 100%; text-align: center;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.8);
+        }
+
+        .quiz-card h2 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 2.2rem;
+            margin-bottom: 35px;
+            color: #fff;
+            line-height: 1.2;
         }
 
         .option-btn {
-            background: none; border: 1px solid rgba(255,255,255,0.2);
-            color: #fff; padding: 18px; border-radius: 15px;
-            cursor: pointer; font-size: 1rem; transition: all 0.3s ease;
-            width: 100%; text-align: left; margin-bottom: 10px;
+            background: rgba(255, 255, 255, 0.05); 
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: #fff; padding: 20px 25px; border-radius: 18px;
+            cursor: pointer; font-size: 1.1rem; transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            width: 100%; text-align: left; margin-bottom: 15px;
+            font-family: 'Plus Jakarta Sans', sans-serif;
         }
 
-        .option-btn.correct { background-color: var(--success) !important; border-color: var(--success) !important; }
-        .option-btn.wrong { background-color: var(--error) !important; border-color: var(--error) !important; }
+        .option-btn:hover {
+            background: rgba(180, 255, 57, 0.1);
+            border-color: var(--primary);
+            transform: translateX(12px);
+            box-shadow: -5px 0 20px rgba(180, 255, 57, 0.1);
+        }
+
+        .option-btn.correct { 
+            background: rgba(46, 204, 113, 0.2) !important; 
+            border-color: var(--success) !important; 
+            color: var(--success);
+            font-weight: 800;
+        }
+
+        .option-btn.wrong { 
+            background: rgba(255, 77, 77, 0.2) !important; 
+            border-color: var(--error) !important; 
+            color: var(--error);
+        }
 
         .next-btn {
-            margin-top: 30px; background: var(--primary); color: #000;
-            padding: 12px 30px; border-radius: 10px; border: none;
-            font-weight: 800; cursor: pointer; display: none;
+            margin-top: 35px; background: var(--primary); color: #000;
+            padding: 15px 40px; border-radius: 50px; border: none;
+            font-weight: 900; cursor: pointer; display: none;
+            text-transform: uppercase; letter-spacing: 1px;
+            transition: all 0.3s ease;
         }
+
+        .next-btn:hover { transform: scale(1.05); box-shadow: 0 0 30px rgba(180, 255, 57, 0.4); }
+
+        #quiz-trigger {
+            background: var(--primary); color: #000; padding: 20px 45px; 
+            border-radius: 50px; font-weight: 800; cursor: pointer; border: none;
+            transition: all 0.3s ease; text-transform: uppercase;
+        }
+        #quiz-trigger:hover { transform: translateY(-5px); box-shadow: 0 10px 30px rgba(180, 255, 57, 0.3); }
+
     </style>
 </head>
 <body>
@@ -219,32 +251,32 @@
                 <div class="glass-card" onclick="openCard(this, event)">
                     <span class="stat-num">500л</span>
                     <p class="card-desc">середня кількість побутових стоків на одну особу в містах.</p>
-                    <div class="full-info">Господарсько-побутові стічні води містять величезну кількість органічних забруднювачів, що потрапляють туди щодня. Основна небезпека полягає у критичному бактеріальному забрудненні, яке сприяє поширенню інфекцій. Без належної фільтрації ці води стають ідеальним середовищем для розмноження патогенів у відкритих водоймах. Очищення таких об'ємів потребує значних енергетичних ресурсів та постійного моніторингу стану активного мулу.</div>
+                    <div class="full-info">Господарсько-побутові стічні води містять величезну кількість органічних забруднювачів. Очищення таких об'ємів потребує значних енергетичних ресурсів та постійного моніторингу.</div>
                 </div>
                 <div class="glass-card" onclick="openCard(this, event)">
                     <span class="stat-num">2.5г</span>
                     <p class="card-desc">важких металів на літр стоків підприємств.</p>
-                    <div class="full-info">Промислові стічні води містять агресивні феноли та солі важких металів, які не здатні розкладатися природним шляхом. Ці токсичні елементи накопичуються в донних відкладеннях річок, отруюючи флору та фауну на десятиліття вперед. Навіть мікроскопічні дози кадмію чи ртуті можуть викликати незворотні зміни в екосистемі всього регіону. Для їх видалення необхідно впроваджувати дорогі методи хімічного осадження та сорбції безпосередньо на заводах.</div>
+                    <div class="full-info">Промислові стічні води містять агресивні феноли та солі важких металів, які накопичуються в донних відкладеннях річок.</div>
                 </div>
                 <div class="glass-card" onclick="openCard(this, event)">
                     <span class="stat-num">65%</span>
                     <p class="card-desc">забруднень потрапляє через дощові води.</p>
-                    <div class="full-info">Зливова каналізація змиває з міських доріг нафтопродукти, пил та залишки палива прямо у річки без жодної фільтрації. Разом із водою у водойми потрапляють солі, якими посипають дороги взимку, та свинець від автомобільних викидів. Такий тип забруднення важко контролювати через його стихійний характер та відсутність очисних споруд на більшості випусків. Модернізація дощових колекторів є пріоритетним завданням для збереження чистоти міських акваторій.</div>
+                    <div class="full-info">Зливова каналізація змиває з міських доріг нафтопродукти та пил прямо у річки без жодної фільтрації.</div>
                 </div>
                 <div class="glass-card" onclick="openCard(this, event)">
                     <span class="stat-num">pH 4.5</span>
                     <p class="card-desc">рівень кислотності стоків хімпрому.</p>
-                    <div class="full-info">Кислотне забруднення миттєво вбиває корисні бактерії, що відповідають за природне самоочищення водойми. Це створює мертві анаеробні зони, де замість кисню починає виділятися отруйний та смердючий сірководень. Різкі коливання рівня pH роз'їдають бетонні конструкції колекторів, що призводить до аварій та витоків хімікатів у ґрунт. Нейтралізація таких стоків є обов'язковим етапом перед їх випуском у загальну міську мережу.</div>
+                    <div class="full-info">Кислотне забруднення вбиває бактерії самоочищення, створюючи мертві анаеробні зони у водоймах.</div>
                 </div>
                 <div class="glass-card" onclick="openCard(this, event)">
                     <span class="stat-num">800тис.</span>
                     <p class="card-desc">мікропластику вимивається за одне прання.</p>
-                    <div class="full-info">Мікропластик проходить крізь майже всі сучасні фільтри очисних споруд через свій мініатюрний розмір. Згодом ці частинки потрапляють у харчовий ланцюг риб, а потім неминуче опиняються в організмі людини. Вчені фіксують наявність пластику в крові та тканинах, що викликає хронічні запалення та інші проблеми зі здоров'ям. Використання спеціальних вловлюючих фільтрів у пральних машинах може стати першим кроком до вирішення цієї глобальної проблеми.</div>
+                    <div class="full-info">Мікропластик проходить крізь фільтри та потрапляє у харчовий ланцюг, викликаючи хронічні запалення.</div>
                 </div>
                 <div class="glass-card" onclick="openCard(this, event)">
                     <span class="stat-num">75%</span>
                     <p class="card-desc">зношеність магістральних колекторів.</p>
-                    <div class="full-info">Критичний стан інженерних мереж призводить до регулярних прихованих витоків нечистот безпосередньо у підземні води. Це руйнує екосистему регіону та створює ризик зараження джерел питного водопостачання для тисяч людей. Старі труби не витримують тиску сучасних міст, що стає причиною масштабних аварій та провалів ґрунту. Повна реконструкція інфраструктури з використанням нових композитних матеріалів є єдиним шляхом запобігання екологічній катастрофі.</div>
+                    <div class="full-info">Критичний стан мереж призводить до витоків нечистот у підземні води, що руйнує екосистему регіону.</div>
                 </div>
             </div>
         </section>
@@ -254,86 +286,72 @@
             <div class="grid">
                 <div class="glass-card" onclick="openCard(this, event)">
                     <span class="stat-num">Побутові</span>
-                    <p class="card-desc">головне джерело фосфатів та органіки у воді.</p>
-                    <div class="full-info">Щодня мільйони літрів води з наших осель потрапляють у міську каналізацію після прання, миття посуду та гігієнічних процедур. Ці стоки насичені агресивними фосфатами з миючих засобів, які провокують бурхливе "цвітіння" водойм та загибель риби. Окрім хімії, вони містять величезну кількість органічних решток та бактерій, що створюють серйозне навантаження на очисні споруд. Без належної біологічної очистки такі води швидко перетворюють чисті річки на непридатні для життя болота.</div>
+                    <p class="card-desc">головне джерело фосфатів та органіки.</p>
+                    <div class="full-info">Фосфати з миючих засобів провокують бурхливе "цвітіння" водойм та масову загибель риби.</div>
                 </div>
                 <div class="glass-card" onclick="openCard(this, event)">
                     <span class="stat-num">Заводи</span>
-                    <p class="card-desc">викиди важких металів та специфічних токсинів.</p>
-                    <div class="full-info">Заводи та фабрики часто скидають у воду специфічні токсини, які неможливо видалити звичайними методами фільтрації. Це можуть бути важкі метали, нафтопродукти або складні синтетичні сполуки, що мають властивість накопичуватися в живих організмах. Такі викиди часто відбуваються приховано або через застаріле обладнання, що не відповідає сучасним екологічним стандартам. Впровадження замкнутих циклів водопостачання на підприємствах є критично важливим для збереження національних водних ресурсів.</div>
+                    <p class="card-desc">викиди важких металів та токсинів.</p>
+                    <div class="full-info">Складні синтетичні сполуки мають властивість накопичуватися в живих тканинах роками.</div>
                 </div>
                 <div class="glass-card" onclick="openCard(this, event)">
                     <span class="stat-num">Агро</span>
                     <p class="card-desc">пестициди та азотні добрива з полів.</p>
-                    <div class="full-info">Сільське господарство є потужним джерелом забруднення через масове використання пестицидів та азотних добрив на полях. Під час дощів ці хімікати вимиваються з ґрунту і стікають у найближчі струмки та підземні водоносні горизонти. Висока концентрація нітратів у воді робить її небезпечною для пиття, особливо для маленьких дітей та людей похилого віку. Контроль за нормами внесення добрив та створення захисних лісосмуг вздовж річок допомагає значно знизити цей негативний вплив.</div>
+                    <div class="full-info">Висока концентрація нітратів робить воду небезпечною для пиття та вбиває річкову флору.</div>
                 </div>
                 <div class="glass-card" onclick="openCard(this, event)">
                     <span class="stat-num">Сміття</span>
-                    <p class="card-desc">токсичний фільтрат, що проникає в ґрунт.</p>
-                    <div class="full-info">Фільтрат, що утворюється на полігонах відходів, є однією з найнебезпечніших рідин, здатних просочуватися глибоко в землю. Він містить суміш продуктів гниття, вимитих барвників, залишків батарейок та іншого токсичного сміття. Потрапляючи у грунтові води, цей "коктейль" може розноситися на десятки кілометрів, отруюючи колодязі у навколишніх селах. Сучасна рекультивація сміттєзвалищ передбачає обов'язкове створення непроникних екранів та систем збору цього небезпечного фільтрату.</div>
+                    <p class="card-desc">токсичний фільтрат з полігонів відходів.</p>
+                    <div class="full-info">Продукти гниття просочуються в землю та отруюють колодязі на десятки кілометрів навколо.</div>
                 </div>
                 <div class="glass-card" onclick="openCard(this, event)">
                     <span class="stat-num">Дороги</span>
                     <p class="card-desc">нафтопродукти та солі зі зливостоків.</p>
-                    <div class="full-info">Автомобільні дороги та залізничні колії постійно накопичують на своїй поверхні мікрочастинки гуми, технічні оливи та залишки палива. Під час сильних злив усі ці забруднення миттєво змиваються у зливостоки, які найчастіше ведуть прямо у відкриті водойми. Окрім паливно-мастильних матеріалів, транспорт є джерелом солей, якими обробляють дороги для боротьби з ожеледицею в зимовий період. Будівництво спеціальних локальних очисних споруд на великих розв'язках допомагає перехоплювати цей бруд до його потрапляння в природу.</div>
+                    <div class="full-info">Паливно-мастильні матеріали утворюють плівку на воді, перекриваючи доступ кисню.</div>
                 </div>
                 <div class="glass-card" onclick="openCard(this, event)">
                     <span class="stat-num">Пластик</span>
                     <p class="card-desc">мікрочастинки, що накопичуються в рибі.</p>
-                    <div class="full-info">Пластикові пляшки, пакети та одноразовий посуд, залишені на берегах, з часом розпадаються на дрібний мікропластик під дією сонця. Ці частинки діють як магніти для інших токсинів, концентруючи на собі небезпечні речовини, що плавають у воді. Тварини часто плутають пластик із їжею, що призводить до їхнього виснаження та масової загибелі через закупорку травної системи. Тільки повна відмова від одноразового пластику та розвиток культури переробки відходів зможуть зупинити цей процес засмічення.</div>
+                    <div class="full-info">Тварини плутають пластик із їжею, що призводить до закупорки травної системи та загибелі.</div>
                 </div>
             </div>
         </section>
 
         <section id="s4">
-    <h2>Процес очищення</h2>
-    <div class="grid">
-        <div class="glass-card" onclick="openCard(this, event)">
-            <span class="stat-num">ЕТАП 1</span>
-            <p class="card-desc">Механічна фільтрація великого сміття.</p>
-            <div class="full-info">
-                <div style="display: flex; gap: 20px; align-items: flex-start;">
-                    <div style="flex: 1;">
-                        На першому етапі вода проходить через автоматизовані решітки та пісковловлювачі. Тут видаляється пластик, папір, каміння та пісок. Це критично важливо для захисту насосів від пошкоджень, проте на цьому етапі вода все ще залишається хімічно брудною та небезпечною.
+            <h2>Процес очищення</h2>
+            <div class="grid">
+                <div class="glass-card" onclick="openCard(this, event)">
+                    <span class="stat-num">ЕТАП 1</span>
+                    <p class="card-desc">Механічна фільтрація великого сміття.</p>
+                    <div class="full-info">
+                        <div style="display: flex; gap: 20px; align-items: flex-start;">
+                            <div style="flex: 1;">На першому етапі вода проходить через автоматизовані решітки. Тут видаляється пластик, папір та каміння.</div>
+                            <div style="flex: 1; min-width: 200px;"><img src="Images1/step1.jpg" style="width: 100%; border-radius: 10px; border: 1px solid var(--primary);"></div>
+                        </div>
                     </div>
-                    <div style="flex: 1; min-width: 200px;">
-                        <img src="Images1/step1.jpg" alt="Step 1" style="width: 100%; border-radius: 10px; border: 1px solid var(--primary);">
+                </div>
+                <div class="glass-card" onclick="openCard(this, event)">
+                    <span class="stat-num">ЕТАП 2</span>
+                    <p class="card-desc">Біологічне очищення активним мулом.</p>
+                    <div class="full-info">
+                        <div style="display: flex; gap: 20px; align-items: flex-start;">
+                            <div style="flex: 1;">Спеціальні бактерії (активний мул) поїдають органіку. Для їх життя в аеротенки постійно подається кисень.</div>
+                            <div style="flex: 1; min-width: 200px;"><img src="Images1/step2.jpg" style="width: 100%; border-radius: 10px; border: 1px solid var(--primary);"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="glass-card" onclick="openCard(this, event)">
+                    <span class="stat-num">ЕТАП 3</span>
+                    <p class="card-desc">Вторинне відстоювання та дезінфекція.</p>
+                    <div class="full-info">
+                        <div style="display: flex; gap: 20px; align-items: flex-start;">
+                            <div style="flex: 1;">Мул осідає на дно, а вода проходить через УФ-випромінювання для знищення вірусів перед випуском.</div>
+                            <div style="flex: 1; min-width: 200px;"><img src="Images1/step3.jpg" style="width: 100%; border-radius: 10px; border: 1px solid var(--primary);"></div>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-
-        <div class="glass-card" onclick="openCard(this, event)">
-            <span class="stat-num">ЕТАП 2</span>
-            <p class="card-desc">Біологічне очищення активним мулом.</p>
-            <div class="full-info">
-                <div style="display: flex; gap: 20px; align-items: flex-start;">
-                    <div style="flex: 1;">
-                        Це серце станції — аеротенки, де спеціальні бактерії (активний мул) поїдають органічні забруднення. Для їхнього життя постійно подається кисень, що дозволяє мікроорганізмам ефективно переробляти відходи. Після цього етапу вода стає прозорою, але все ще може містити дрібні частинки мулу.
-                    </div>
-                    <div style="flex: 1; min-width: 200px;">
-                        <img src="Images1/step2.jpg" alt="Step 2" style="width: 100%; border-radius: 10px; border: 1px solid var(--primary);">
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="glass-card" onclick="openCard(this, event)">
-            <span class="stat-num">ЕТАП 3</span>
-            <p class="card-desc">Вторинне відстоювання та дезінфекція.</p>
-            <div class="full-info">
-                <div style="display: flex; gap: 20px; align-items: flex-start;">
-                    <div style="flex: 1;">
-                        На фінальній стадії вода відстоюється у вторинних відстійниках, де мул осідає на дно. Далі очищена вода проходить через систему ультрафіолетового опромінення для знищення вірусів. Тільки після повного циклу перевірки воду безпечно повертають у природне середовище.
-                    </div>
-                    <div style="flex: 1; min-width: 200px;">
-                        <img src="Images1/step3.jpg" alt="Step 3" style="width: 100%; border-radius: 10px; border: 1px solid var(--primary);">
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
+        </section>
 
         <section id="s5">
             <h2 style="text-align: center; margin-bottom: 40px;">МОНІТОРИНГ СТОКІВ</h2>
@@ -349,6 +367,7 @@
         <section id="quiz-anchor">
             <div style="text-align: center;">
                 <h1 style="font-size: 4rem;">КОНТРОЛЬ ЗНАНЬ</h1>
+                <p style="margin-bottom: 30px; color: #888;">Перевір, наскільки уважно ти вивчав матеріал</p>
                 <button id="quiz-trigger" onclick="startQuiz()">РОЗПОЧАТИ ТЕСТУВАННЯ</button>
             </div>
         </section>
@@ -367,6 +386,7 @@
     </div>
 
     <script>
+        // ЛОГІКА КАРТОК
         function openCard(card, event) {
             if(card.classList.contains('active')) return;
             event.stopPropagation();
@@ -389,6 +409,7 @@
             document.body.classList.remove('no-scroll');
         }
 
+        // ЛОГІКА ВІКТОРИНИ
         const questions = [
             { q: "Чому біологічне очищення (Етап 2) важливе?", a: ["Там воду фарбують", "Мікроорганізми поїдають органіку", "Там прибирають пластик", "Там вода замерзає"], c: 1 },
             { q: "Яка зношеність мереж у великих містах?", a: ["10%", "50%", "75%", "100%"], c: 2 },
@@ -398,14 +419,18 @@
         let curQ = 0;
         let answered = false;
 
-        function startQuiz() { document.getElementById('qOverlay').style.display='flex'; renderQuestion(); }
+        function startQuiz() { 
+            document.getElementById('qOverlay').style.display='flex'; 
+            curQ = 0;
+            renderQuestion(); 
+        }
 
         function renderQuestion() {
             answered = false;
             document.getElementById('nextBtn').style.display = 'none';
             const d = questions[curQ];
             document.getElementById('qContent').innerHTML = `
-                <h2 style="margin-bottom:20px; color:#fff;">${d.q}</h2>
+                <h2 style="color:#fff;">${d.q}</h2>
                 <div id="options">
                     ${d.a.map((o, i) => `<button class="option-btn" onclick="checkAnswer(${i}, this)">${o}</button>`).join('')}
                 </div>`;
@@ -416,15 +441,24 @@
             answered = true;
             const correct = questions[curQ].c;
             const btns = document.querySelectorAll('.option-btn');
-            if(i === correct) btn.classList.add('correct');
-            else { btn.classList.add('wrong'); btns[correct].classList.add('correct'); }
+            
+            if(i === correct) {
+                btn.classList.add('correct');
+            } else {
+                btn.classList.add('wrong');
+                btns[correct].classList.add('correct');
+            }
             document.getElementById('nextBtn').style.display = 'inline-block';
         }
 
         function nextQuestion() {
             curQ++;
-            if(curQ < questions.length) renderQuestion();
-            else { document.getElementById('qOverlay').style.display='none'; document.getElementById('final-slide').scrollIntoView(); }
+            if(curQ < questions.length) {
+                renderQuestion();
+            } else {
+                document.getElementById('qOverlay').style.display='none'; 
+                document.getElementById('final-slide').scrollIntoView();
+            }
         }
 
         window.onscroll = () => {
