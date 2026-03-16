@@ -79,21 +79,31 @@
         .stat-num { font-size: 1.8rem; font-weight: 900; color: var(--primary); display: block; margin-bottom: 10px; text-transform: uppercase; }
         .card-desc { font-size: 0.9rem; color: #ccc; }
         .full-info { display: none; margin-top: 20px; font-size: 1.1rem; line-height: 1.6; color: #fff; }
+        .card-img { display: none; width: 100%; border-radius: 15px; margin-top: 20px; object-fit: cover; border: 1px solid var(--primary); }
 
+        /* АКТИВНА КАРТКА З ФОТО */
         .glass-card.active {
             position: fixed;
             top: 50%; left: 50%;
             transform: translate(-50%, -50%);
-            width: 85%; max-width: 900px;
+            width: 90%; max-width: 1100px;
             z-index: 9999;
             background: rgba(10, 18, 5, 0.98);
             border: 2px solid var(--primary);
             box-shadow: 0 0 150px rgba(180, 255, 57, 0.15);
             cursor: default;
-            padding: 50px;
+            padding: 40px;
             border-radius: 30px;
+            display: flex;
+            gap: 40px;
+            align-items: center;
         }
+        
+        .active-content { flex: 1; }
+        .active-media { flex: 1; display: block; }
+
         .glass-card.active .full-info { display: block; }
+        .glass-card.active .card-img { display: block; height: 400px; margin-top: 0; }
         .glass-card.active .stat-num { font-size: 4rem; }
         .glass-card.active .card-desc { font-size: 1.2rem; color: var(--primary); margin-bottom: 20px; }
 
@@ -221,19 +231,34 @@
             <h2>Етапи Очищення Води</h2>
             <div class="grid">
                 <div class="glass-card" onclick="openCard(this, event)">
-                    <span class="stat-num">Етап 1</span>
-                    <p class="card-desc">Механічна фільтрація великого сміття.</p>
-                    <div class="full-info">На першому етапі вода проходить через автоматизовані решітки та пісковловлювачі. Тут видаляється пластик, папір, каміння та пісок. Це критично важливо для захисту насосів від пошкоджень, проте на цьому етапі вода все ще залишається хімічно брудною та небезпечною.</div>
+                    <div class="active-content">
+                        <span class="stat-num">Етап 1</span>
+                        <p class="card-desc">Механічна фільтрація великого сміття.</p>
+                        <div class="full-info">На першому етапі вода проходить через автоматизовані решітки та пісковловлювачі. Тут видаляється пластик, папір, каміння та пісок. Це критично важливо для захисту насосів від пошкоджень, проте на цьому етапі вода все ще залишається хімічно брудною та небезпечною.</div>
+                    </div>
+                    <div class="active-media">
+                        <img src="Images1/step1.jpg" class="card-img" alt="Механічне очищення">
+                    </div>
                 </div>
                 <div class="glass-card" onclick="openCard(this, event)">
-                    <span class="stat-num">Етап 2</span>
-                    <p class="card-desc">Біологічне очищення активним мулом.</p>
-                    <div class="full-info">Це «серце» очисної станції. У спеціальних басейнах (аеротенках) живуть мільярди мікроорганізмів, які поїдають органічні забруднювачі. Вони перетворюють шкідливі відходи на нешкідливий газ та надлишковий мул. Без цього етапу річки б миттєво зацвітали та гинули.</div>
+                    <div class="active-content">
+                        <span class="stat-num">Етап 2</span>
+                        <p class="card-desc">Біологічне очищення активним мулом.</p>
+                        <div class="full-info">Це «серце» очисної станції. У спеціальних басейнах (аеротенках) живуть мільярди мікроорганізмів, які поїдають органічні забруднювачі. Вони перетворюють шкідливі відходи на нешкідливий газ та надлишковий мул. Без цього етапу річки б миттєво зацвітали та гинули.</div>
+                    </div>
+                    <div class="active-media">
+                        <img src="Images1/step2.jpg" class="card-img" alt="Біологічне очищення">
+                    </div>
                 </div>
                 <div class="glass-card" onclick="openCard(this, event)">
-                    <span class="stat-num">Етап 3</span>
-                    <p class="card-desc">Хімічне знезараження та скид.</p>
-                    <div class="full-info">На фінальній стадії воду очищують від фосфатів та залишків бактерій за допомогою ультрафіолету або спеціальних реагентів. Тільки після цього вода стає достатньо безпечною, щоб її можна було повернути в природне середовище, не порушуючи екосистему річки.</div>
+                    <div class="active-content">
+                        <span class="stat-num">Етап 3</span>
+                        <p class="card-desc">Хімічне знезараження та скид.</p>
+                        <div class="full-info">На фінальній стадії воду очищують від фосфатів та залишків бактерій за допомогою ультрафіолету або спеціальних реагентів. Тільки після цього вода стає достатньо безпечною, щоб її можна було повернути в природне середовище, не порушуючи екосистему річки.</div>
+                    </div>
+                    <div class="active-media">
+                        <img src="Images1/step3.jpg" class="card-img" alt="Хімічне очищення">
+                    </div>
                 </div>
             </div>
         </section>
@@ -285,6 +310,7 @@
             document.getElementById('close-layer').style.display = 'none';
             document.getElementById('main-content').style.opacity = '1';
             document.getElementById('main-content').style.pointerEvents = 'auto';
+            document.body.classList.remove('remove-scroll');
             document.body.classList.remove('no-scroll');
         }
 
