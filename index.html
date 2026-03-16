@@ -153,9 +153,9 @@
         /* ОБНОВЛЕНІ СТИЛІ ВІКТОРИНИ */
         .quiz-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(5, 7, 10, 0.95); z-index: 10000;
+            background: rgba(5, 7, 10, 0.98); z-index: 10000;
             display: none; flex-direction: column; align-items: center; justify-content: center;
-            padding: 20px; backdrop-filter: blur(15px);
+            padding: 20px; backdrop-filter: blur(20px);
         }
 
         .quiz-card {
@@ -177,7 +177,7 @@
         .option-btn {
             background: rgba(255, 255, 255, 0.05); 
             border: 1px solid rgba(255, 255, 255, 0.1);
-            color: #fff; padding: 20px 25px; border-radius: 18px;
+            color: #fff; padding: 18px 25px; border-radius: 18px;
             cursor: pointer; font-size: 1.1rem; transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             width: 100%; text-align: left; margin-bottom: 15px;
             font-family: 'Plus Jakarta Sans', sans-serif;
@@ -187,7 +187,6 @@
             background: rgba(180, 255, 57, 0.1);
             border-color: var(--primary);
             transform: translateX(12px);
-            box-shadow: -5px 0 20px rgba(180, 255, 57, 0.1);
         }
 
         .option-btn.correct { 
@@ -207,19 +206,16 @@
             margin-top: 35px; background: var(--primary); color: #000;
             padding: 15px 40px; border-radius: 50px; border: none;
             font-weight: 900; cursor: pointer; display: none;
-            text-transform: uppercase; letter-spacing: 1px;
-            transition: all 0.3s ease;
+            text-transform: uppercase; transition: all 0.3s ease;
         }
 
-        .next-btn:hover { transform: scale(1.05); box-shadow: 0 0 30px rgba(180, 255, 57, 0.4); }
+        .next-btn:hover { transform: scale(1.05); }
 
         #quiz-trigger {
             background: var(--primary); color: #000; padding: 20px 45px; 
             border-radius: 50px; font-weight: 800; cursor: pointer; border: none;
             transition: all 0.3s ease; text-transform: uppercase;
         }
-        #quiz-trigger:hover { transform: translateY(-5px); box-shadow: 0 10px 30px rgba(180, 255, 57, 0.3); }
-
     </style>
 </head>
 <body>
@@ -409,11 +405,14 @@
             document.body.classList.remove('no-scroll');
         }
 
-        // ЛОГІКА ВІКТОРИНИ
+        // ЛОГІКА ВІКТОРИНИ (6 питань)
         const questions = [
             { q: "Чому біологічне очищення (Етап 2) важливе?", a: ["Там воду фарбують", "Мікроорганізми поїдають органіку", "Там прибирають пластик", "Там вода замерзає"], c: 1 },
             { q: "Яка зношеність мереж у великих містах?", a: ["10%", "50%", "75%", "100%"], c: 2 },
-            { q: "Що таке мікропластик?", a: ["Великі пляшки", "Частинки, що потрапляють у харчовий ланцюг", "Новий вид риб", "Будівельний матеріал"], c: 1 }
+            { q: "Що таке мікропластик?", a: ["Великі пляшки", "Частинки, що потрапляють у харчовий ланцюг", "Новий вид риб", "Будівельний матеріал"], c: 1 },
+            { q: "Яка речовина з побутових стоків провокує «цвітіння» води?", a: ["Фосфати", "Пісок", "Кисень", "Кухонна сіль"], c: 0 },
+            { q: "Як агросфера найчастіше забруднює воду?", a: ["Викидами пластику", "Пестицидами та нітратами", "Гарячою водою", "Залишками їжі"], c: 1 },
+            { q: "До чого призводить низький рівень pH (4.5) у стоках?", a: ["Вода стає солодкою", "Збільшується кількість риби", "Вбиваються корисні бактерії", "Вода швидше очищується"], c: 2 }
         ];
 
         let curQ = 0;
@@ -430,7 +429,8 @@
             document.getElementById('nextBtn').style.display = 'none';
             const d = questions[curQ];
             document.getElementById('qContent').innerHTML = `
-                <h2 style="color:#fff;">${d.q}</h2>
+                <div style="color: var(--primary); font-weight: 800; margin-bottom: 10px; font-size: 0.9rem;">ПИТАННЯ ${curQ + 1} З ${questions.length}</div>
+                <h2>${d.q}</h2>
                 <div id="options">
                     ${d.a.map((o, i) => `<button class="option-btn" onclick="checkAnswer(${i}, this)">${o}</button>`).join('')}
                 </div>`;
@@ -448,7 +448,10 @@
                 btn.classList.add('wrong');
                 btns[correct].classList.add('correct');
             }
-            document.getElementById('nextBtn').style.display = 'inline-block';
+            
+            const nextBtn = document.getElementById('nextBtn');
+            nextBtn.innerText = (curQ === questions.length - 1) ? "ЗАВЕРШИТИ ТЕСТ" : "НАСТУПНЕ ПИТАННЯ";
+            nextBtn.style.display = 'inline-block';
         }
 
         function nextQuestion() {
