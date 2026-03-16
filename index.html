@@ -354,9 +354,17 @@
                         onclick="location.reload()">
                     ПЕРЕЗАПУСТИТИ
                 </button>
-            </div> 
+            </div>
+        </section>
+    </div> <div class="quiz-overlay" id="qOverlay">
+        <div class="quiz-card">
+            <div id="qContent"></div>
+            <button class="next-btn" id="nextBtn" onclick="nextQuestion()">НАСТУПНЕ ПИТАННЯ</button>
+        </div>
+    </div>
 
     <script>
+        // Тут залишається твій скрипт без змін
         function openCard(card, event) {
             if(card.classList.contains('active')) return;
             event.stopPropagation();
