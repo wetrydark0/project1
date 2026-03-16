@@ -111,6 +111,7 @@
         .card-desc { font-size: 0.9rem; color: #ccc; pointer-events: none;}
         .full-info { display: none; margin-top: 20px; font-size: 1.1rem; line-height: 1.6; color: #fff; }
 
+        /* Стиль активної картки (модалки) */
         .glass-card.active {
             position: fixed;
             top: 50%; left: 50%;
@@ -384,10 +385,10 @@
         </section>
 
         <section id="quiz-anchor">
-            <div style="text-align: center;">
+            <div style="text-align: center;" id="quiz-intro">
                 <h1 style="font-size: 4rem;">КОНТРОЛЬ ЗНАНЬ</h1>
                 <p style="margin-bottom: 30px; color: #888;"></p>
-                <button id="quiz-trigger" onclick="startQuiz()">РОЗПОЧАТИ ТЕСТУВАТНЯ</button>
+                <button id="quiz-trigger" onclick="startQuiz()">РОЗПОЧАТИ ТЕСТУВАННЯ</button>
             </div>
         </section>
 
@@ -436,8 +437,7 @@
             gsap.to(cursor, { x: e.clientX, y: e.clientY, duration: 0.1 });
         });
 
-        const cards = document.querySelectorAll('.glass-card');
-        cards.forEach(card => {
+        function setupCardEffects(card) {
             card.addEventListener('mousemove', (e) => {
                 const rect = card.getBoundingClientRect();
                 const x = e.clientX - rect.left;
@@ -466,7 +466,9 @@
                 gsap.to(card, { rotateX: 0, rotateY: 0, scale: 1, duration: 0.5 });
                 gsap.to(cursor, { scale: 1, backgroundColor: "#b4ff39", border: "none" });
             });
-        });
+        }
+
+        document.querySelectorAll('.glass-card').forEach(setupCardEffects);
 
         // 3. REVEAL АНІМАЦІЇ
         gsap.registerPlugin(ScrollTrigger);
@@ -475,12 +477,12 @@
             y: 80, opacity: 0, stagger: 0.1, duration: 1, ease: "power4.out"
         });
 
-        // 4. ФУНКЦІЇ КАРТОК
+        // 4. ФУНКЦІЇ КАРТОК (ВІДКРИТТЯ)
         function openCard(card, event) {
             if(card.classList.contains('active')) return;
             event.stopPropagation();
             
-            // Тепер замість просто blur робимо повну прозорість фону
+            // Ховаємо основний контент
             document.getElementById('main-content').style.opacity = '0';
             document.getElementById('main-content').style.filter = 'blur(10px)';
             document.getElementById('close-layer').style.display = 'block';
@@ -513,7 +515,7 @@
             document.body.classList.remove('no-scroll');
         }
 
-        // ВІКТОРИНА (БЕЗ ЗМІН ЛОГІКИ)
+        // ВІКТОРИНА (ФІКС БАГІВ)
         const questions = [
             { q: "Яку роль відіграє активний мул на другому етапі очищення?", a: ["Механічне відсіювання дрібних часток пластику", "Окиснення органічних сполук колоніями бактерій", "Хімічне осадження солей важких металів", "Зміна рівня кислотності для дезінфекції"], c: 1 },
             { q: "Який показник зношеності магістральних колекторів є критичним для міст?", a: ["Близько 25%", "Понад 50%", "Приблизно 75%", "Майже 95%"], c: 2 },
@@ -527,6 +529,10 @@
         let answered = false;
 
         function startQuiz() { 
+            // Використовуємо ефект зникання як на 4 слайді
+            document.getElementById('main-content').style.opacity = '0';
+            document.getElementById('main-content').style.filter = 'blur(10px)';
+            
             document.getElementById('qOverlay').style.display='flex'; 
             curQ = 0;
             renderQuestion(); 
@@ -542,6 +548,10 @@
                 <div id="options">
                     ${d.a.map((o, i) => `<button class="option-btn" onclick="checkAnswer(${i}, this)">${o}</button>`).join('')}
                 </div>`;
+            
+            gsap.from("#qContent h2, .option-btn", {
+                opacity: 0, y: 20, stagger: 0.1, duration: 0.5
+            });
         }
 
         function checkAnswer(i, btn) {
@@ -560,6 +570,8 @@
             if(curQ < questions.length) renderQuestion();
             else {
                 document.getElementById('qOverlay').style.display='none'; 
+                document.getElementById('main-content').style.opacity = '1';
+                document.getElementById('main-content').style.filter = 'none';
                 document.getElementById('final-slide').scrollIntoView();
             }
         }
