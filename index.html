@@ -80,56 +80,64 @@
         
         .stat-num { font-size: 1.8rem; font-weight: 900; color: var(--primary); display: block; margin-bottom: 10px; text-transform: uppercase; }
         .card-desc { font-size: 0.9rem; color: #ccc; }
-        .full-info { display: none; margin-top: 20px; font-size: 1.1rem; line-height: 1.6; color: #fff; }
-        .card-img { display: none; width: 100%; border-radius: 15px; margin-top: 20px; object-fit: cover; border: 1px solid var(--primary); }
+        
+        /* ПРИХОВАНІ ДАНІ ДЛЯ МОДАЛКИ */
+        .full-info, .card-title-full { display: none; }
 
+        /* ВИГЛЯД ВІДКРИТОГО БЛОКУ (ЯК НА ФОТО) */
         .glass-card.active {
             position: fixed;
             top: 50%; left: 50%;
             transform: translate(-50%, -50%);
-            width: 90%; max-width: 1100px;
+            width: 80%; max-width: 900px;
             z-index: 9999;
-            background: rgba(10, 18, 5, 0.98);
+            background: #05070a;
             border: 2px solid var(--primary);
-            box-shadow: 0 0 150px rgba(180, 255, 57, 0.15);
             cursor: default;
-            padding: 40px;
-            border-radius: 30px;
-            display: flex;
-            gap: 40px;
-            align-items: center;
-        }
-        
-        .active-content { flex: 1; }
-        .active-media { flex: 1.2; display: none; } 
-
-        .glass-card.active .active-media { display: block; }
-        .glass-card.active .full-info { display: block; }
-        .glass-card.active .card-img { display: block; height: 450px; margin-top: 0; }
-        .glass-card.active .stat-num { font-size: 4rem; }
-
-        .video-container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            background: rgba(255,255,255,0.02);
-            padding: 30px;
+            padding: 60px;
             border-radius: 40px;
-            border: 1px solid rgba(180, 255, 57, 0.2);
+            display: block; /* Повертаємо блочну структуру */
+            text-align: left;
         }
 
-        .video-frame { 
-            border-radius: 20px; 
-            overflow: hidden; 
-            border: 1px solid var(--primary); 
-            width: 100%; 
-            max-width: 900px; 
+        .glass-card.active .card-title-full {
+            display: block;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 5rem;
+            line-height: 1;
+            margin-bottom: 20px;
+            color: #fff;
+            text-transform: uppercase;
         }
+
+        .glass-card.active .card-desc {
+            display: block;
+            font-size: 1.2rem;
+            color: var(--primary);
+            font-weight: 800;
+            margin-bottom: 30px;
+        }
+
+        .glass-card.active .full-info {
+            display: block;
+            font-size: 1.1rem;
+            line-height: 1.6;
+            color: #e0e0e0;
+        }
+
+        /* Стилі для відео та прогрес-бару */
+        .video-container {
+            display: flex; justify-content: center; align-items: center;
+            background: rgba(255,255,255,0.02); padding: 30px;
+            border-radius: 40px; border: 1px solid rgba(180, 255, 57, 0.2);
+        }
+
+        .video-frame { border-radius: 20px; overflow: hidden; border: 1px solid var(--primary); width: 100%; max-width: 900px; }
 
         #close-layer {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             z-index: 9000; display: none;
-            background: rgba(0,0,0,0.6); backdrop-filter: blur(8px);
+            background: rgba(0,0,0,0.85); backdrop-filter: blur(10px);
         }
 
         .progress-bar {
@@ -137,40 +145,20 @@
             background: var(--primary); width: 0%; z-index: 3000;
         }
 
-        #quiz-trigger {
-            background: var(--primary); color: #000; padding: 18px 36px; 
-            border-radius: 50px; font-weight: 800; cursor: pointer; border: none;
-        }
-
+        /* Квіз */
         .quiz-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: var(--bg); z-index: 10000;
             display: none; flex-direction: column; align-items: center; justify-content: center;
             padding: 20px;
         }
-
-        .quiz-card {
-            background: var(--card);
-            padding: 40px; border-radius: 30px;
-            border: 1px solid rgba(255,255,255,0.1);
-            max-width: 800px; width: 100%; text-align: center;
-        }
-
         .option-btn {
             background: none; border: 1px solid rgba(255,255,255,0.2);
-            color: #fff; padding: 18px; border-radius: 15px;
-            cursor: pointer; font-size: 1rem; transition: all 0.3s ease;
-            width: 100%; text-align: left; margin-bottom: 10px;
+            color: #fff; padding: 18px; border-radius: 15px; margin-bottom: 10px;
+            cursor: pointer; width: 100%; text-align: left;
         }
-
-        .option-btn.correct { background-color: var(--success) !important; border-color: var(--success) !important; }
-        .option-btn.wrong { background-color: var(--error) !important; border-color: var(--error) !important; }
-
-        .next-btn {
-            margin-top: 30px; background: var(--primary); color: #000;
-            padding: 12px 30px; border-radius: 10px; border: none;
-            font-weight: 800; cursor: pointer; display: none;
-        }
+        .option-btn.correct { background: var(--success) !important; border-color: var(--success); }
+        .option-btn.wrong { background: var(--error) !important; border-color: var(--error); }
     </style>
 </head>
 <body>
@@ -184,122 +172,57 @@
             <h1 style="font-size: clamp(2.5rem, 7vw, 5rem); margin-bottom: 50px;">
                 ЗАБРУДНЕННЯ<br><span style="color: var(--primary)">СТІЧНИХ ВОД.</span>
             </h1>
-            <div style="display: flex; gap: 20px; flex-wrap: wrap;">
-                <div style="border: 1px solid var(--primary); padding: 12px 24px; border-radius: 15px; background: rgba(180, 255, 57, 0.05);">
-                    <span style="font-size: 0.75rem; color: var(--primary); display: block; text-transform: uppercase;">Розробник</span>
+            <div style="display: flex; gap: 20px;">
+                <div style="border: 1px solid var(--primary); padding: 12px 24px; border-radius: 15px;">
                     <strong>РОМАН БАБЕЛЬСЬКИЙ</strong>
-                </div>
-                <div style="border: 1px solid rgba(255,255,255,0.2); padding: 12px 24px; border-radius: 15px; background: rgba(255, 255, 255, 0.05);">
-                    <span style="font-size: 0.75rem; color: #a0a0a0; display: block; text-transform: uppercase;">Контент</span>
-                    <strong>МАТВІЙ СМОЛЬНИЦЬКИЙ</strong>
                 </div>
             </div>
         </section>
 
         <section id="s2">
-            <h2>Класифікація та Вплив Стоків</h2>
+            <h2>Класифікація Стоків</h2>
             <div class="grid">
-                <div class="glass-card" onclick="openCard(this, event)">
+                <div class="glass-card" onclick="openCard(this)">
+                    <span class="card-title-full">500Л</span>
                     <span class="stat-num">500л</span>
                     <p class="card-desc">середня кількість побутових стоків на одну особу в містах.</p>
-                    <div class="full-info">Господарсько-побутові стічні води містять величезну кількість органічних забруднювачів. Основна небезпека полягає у бактеріальному забрудненні.</div>
+                    <div class="full-info">Господарсько-побутові стічні води містять величезну кількість органічних забруднювачів. Основна небезпека полягає у бактеріальному забрудненні, оскільки такі стоки є ідеальним середовищем для патогенів.</div>
                 </div>
-                <div class="glass-card" onclick="openCard(this, event)">
-                    <span class="stat-num">2.5г</span>
-                    <p class="card-desc">важких металів на літр стоків підприємств.</p>
-                    <div class="full-info">Промислові стічні води містять агресивні феноли та солі важких металів, які не розкладаються природним шляхом.</div>
-                </div>
-                <div class="glass-card" onclick="openCard(this, event)">
-                    <span class="stat-num">65%</span>
-                    <p class="card-desc">забруднень потрапляє через дощові води.</p>
-                    <div class="full-info">Ливнева каналізація змиває з доріг нафтопродукти та свинець прямо у річки без фільтрації.</div>
-                </div>
-                <div class="glass-card" onclick="openCard(this, event)">
-                    <span class="stat-num">pH 4.5</span>
-                    <p class="card-desc">рівень кислотності стоків хімпрому.</p>
-                    <div class="full-info">Кислотне забруднення вбиває корисні бактерії та створює анаеробні зони, де вода починає виділяти отруйний сірководень.</div>
-                </div>
-                <div class="glass-card" onclick="openCard(this, event)">
-                    <span class="stat-num">800тис.</span>
-                    <p class="card-desc">мікропластику вимивається за одне прання.</p>
-                    <div class="full-info">Мікропластик проходить крізь усі сучасні фільтри та потрапляє у харчовий ланцюг риб, а згодом і людини.</div>
-                </div>
-                <div class="glass-card" onclick="openCard(this, event)">
+                <div class="glass-card" onclick="openCard(this)">
+                    <span class="card-title-full">75%</span>
                     <span class="stat-num">75%</span>
-                    <p class="card-desc">зношеність магістральних колекторів.</p>
-                    <div class="full-info">Критичний стан мереж призводить до витоку нечистот у ґрунтові води, що руйнує екосистему регіону.</div>
+                    <p class="card-desc">зношеність магістральних колекторів у великих містах.</p>
+                    <div class="full-info">Критичний стан мереж призводить до витоку нечистот у ґрунтові води. Це спричиняє руйнування фундаментів та забруднення колодязів.</div>
                 </div>
-            </div>
-        </section>
-
-        <section id="s3">
-            <h2>Джерела Забруднення</h2>
-            <div class="grid">
-                <div class="glass-card" onclick="openCard(this, event)">
-                    <span class="stat-num">Побутові</span>
-                    <p class="card-desc">Мийні засоби та кухонні відходи.</p>
-                    <div class="full-info">Щодня у каналізацію потрапляють тонни ПАР та жиру, який утворює пробки в міських трубопроводах.</div>
                 </div>
-                <div class="glass-card" onclick="openCard(this, event)">
-                    <span class="stat-num">Пром-стоки</span>
-                    <p class="card-desc">Важкі метали та кислоти.</p>
-                    <div class="full-info">Заводи скидають воду з вмістом кадмію та ртуті, які накопичуються в річковому мулі поколіннями.</div>
-                </div>
-                <div class="glass-card" onclick="openCard(this, event)">
-                    <span class="stat-num" style="color: #ff4d4d;">Аварійні</span>
-                    <p class="card-desc">Прориви та витоки каналізації.</p>
-                    <div class="full-info">Через зношеність труб стаються залпові викиди сирої каналізації, що заражає питні горизонти.</div>
-                </div>
-                <div class="glass-card" onclick="openCard(this, event)">
-                    <span class="stat-num">Фармація</span>
-                    <p class="card-desc">Залишки ліків у воді.</p>
-                    <div class="full-info">Антибіотики у стоках створюють "супербактерії", які стійкі до сучасного медичного лікування.</div>
-                </div>
-                <div class="glass-card" onclick="openCard(this, event)">
-                    <span class="stat-num">Е-відходи</span>
-                    <p class="card-desc">Токсини зі звалищ електроніки.</p>
-                    <div class="full-info">Дощова вода вимиває з покинутих акумуляторів літій та миш'як прямо у ґрунтові води.</div>
-                </div>
-                <div class="glass-card" onclick="openCard(this, event)">
-                    <span class="stat-num">Агро-стоки</span>
-                    <p class="card-desc">Відходи м'ясокомбінатів.</p>
-                    <div class="full-info">Харчова промисловість генерує стоки з високою концентрацією органіки, що викликає цвітіння води.</div>
-                </div>
-            </div>
         </section>
 
         <section id="s4">
-            <h2>Етапи Очищення Води</h2>
+            <h2>Етапи Очищення</h2>
             <div class="grid">
-                <div class="glass-card" onclick="openCard(this, event)">
-                    <div class="active-content">
-                        <span class="stat-num">Етап 1</span>
-                        <p class="card-desc">Механічна фільтрація сміття.</p>
-                        <div class="full-info">Вода проходить через решітки та пісковловлювачі. Тут видаляється пластик та каміння, що захищає насоси.</div>
-                    </div>
-                    <div class="active-media"><img src="Images1/step1.jpg" class="card-img" alt="Етап 1"></div>
+                <div class="glass-card" onclick="openCard(this)">
+                    <span class="card-title-full">ЕТАП 1</span>
+                    <span class="stat-num">Етап 1</span>
+                    <p class="card-desc">Механічна фільтрація великого сміття.</p>
+                    <div class="full-info">На першому етапі вода проходить через автоматизовані решітки та пісковловлювачі. Тут видаляється пластик, папір, каміння та пісок. Це критично важливо для захисту насосів від пошкоджень, проте на цьому етапі вода все ще залишається хімічно брудною та небезпечною.</div>
                 </div>
-                <div class="glass-card" onclick="openCard(this, event)">
-                    <div class="active-content">
-                        <span class="stat-num">Етап 2</span>
-                        <p class="card-desc">Біологічне очищення мулом.</p>
-                        <div class="full-info">В аеротенках мікроорганізми "поїдають" органіку. Це серце станції, де вода стає безпечною.</div>
-                    </div>
-                    <div class="active-media"><img src="Images1/step2.jpg" class="card-img" alt="Етап 2"></div>
+                <div class="glass-card" onclick="openCard(this)">
+                    <span class="card-title-full">ЕТАП 2</span>
+                    <span class="stat-num">Етап 2</span>
+                    <p class="card-desc">Біологічне очищення активним мулом.</p>
+                    <div class="full-info">В аеротенках мільярди мікроорганізмів "поїдають" органіку. Це серце станції, де вода стає екологічно безпечною завдяки природним процесам окислення.</div>
                 </div>
-                <div class="glass-card" onclick="openCard(this, event)">
-                    <div class="active-content">
-                        <span class="stat-num">Етап 3</span>
-                        <p class="card-desc">Хімічне знезараження.</p>
-                        <div class="full-info">Фінальна очистка від фосфатів та бактерій за допомогою УФ-променів перед скидом у річку.</div>
-                    </div>
-                    <div class="active-media"><img src="Images1/step3.jpg" class="card-img" alt="Етап 3"></div>
+                <div class="glass-card" onclick="openCard(this)">
+                    <span class="card-title-full">ЕТАП 3</span>
+                    <span class="stat-num">Етап 3</span>
+                    <p class="card-desc">Хімічне знезараження та УФ-очистка.</p>
+                    <div class="full-info">Фінальна очистка від фосфатів та залишків бактерій. Використання ультрафіолету дозволяє знищити віруси без використання шкідливого хлору.</div>
                 </div>
             </div>
         </section>
 
         <section id="s5">
-            <h2 style="text-align: center;">ТЕХНОЛОГІЧНИЙ МОНІТОРИНГ</h2>
+            <h2 style="text-align: center;">МОНІТОРИНГ СТОКІВ</h2>
             <div class="video-container">
                 <div class="video-frame">
                     <video style="width: 100%; display: block;" controls loop muted autoplay>
@@ -311,30 +234,19 @@
 
         <section id="quiz-anchor">
             <div style="text-align: center;">
-                <h1 style="font-size: 4rem;">КОНТРОЛЬ ЗНАНЬ</h1>
-                <button id="quiz-trigger" onclick="startQuiz()">РОЗПОЧАТИ ТЕСТУВАННЯ</button>
+                <h1 style="font-size: 4rem;">ТЕСТУВАННЯ</h1>
+                <button id="quiz-trigger" style="margin-top: 30px;" onclick="startQuiz()">ПОЧАТИ</button>
             </div>
         </section>
-
-        <section id="final-slide">
-            <h1>МАЙБУТНЄ ЗА НАМИ.</h1>
-            <button id="quiz-trigger" style="margin-top: 50px;" onclick="location.reload()">ПЕРЕЗАПУСТИТИ</button>
-        </section>
     </div>
 
-    <div class="quiz-overlay" id="qOverlay">
-        <div class="quiz-card">
-            <div id="qContent"></div>
-            <button class="next-btn" id="nextBtn" onclick="nextQuestion()">НАСТУПНЕ ПИТАННЯ</button>
-        </div>
-    </div>
+    <div class="quiz-overlay" id="qOverlay"><div class="quiz-card" id="qContent"></div></div>
 
     <script>
-        function openCard(card, event) {
-            if(card.classList.contains('active')) return;
-            event.stopPropagation();
+        function openCard(card) {
             document.getElementById('main-content').style.opacity = '0';
             document.getElementById('close-layer').style.display = 'block';
+            
             const clone = card.cloneNode(true);
             clone.classList.add('active');
             clone.id = "active-modal";
@@ -344,49 +256,32 @@
 
         function closeAllCards() {
             const modal = document.getElementById('active-modal');
-            if(!modal) return;
-            modal.remove();
+            if(modal) modal.remove();
             document.getElementById('close-layer').style.display = 'none';
             document.getElementById('main-content').style.opacity = '1';
             document.body.classList.remove('no-scroll');
         }
 
+        // Логіка квізу (спрощена для прикладу)
         const questions = [
-            { q: "Чому біологічне очищення (Етап 2) важливе?", a: ["Там воду фарбують", "Мікроорганізми поїдають органіку", "Там прибирають пластик", "Там вода замерзає"], c: 1 },
-            { q: "Яка зношеність мереж у великих містах?", a: ["10%", "50%", "75%", "100%"], c: 2 },
-            { q: "Що таке мікропластик?", a: ["Великі пляшки", "Частинки, що потрапляють у харчовий ланцюг", "Новий вид риб", "Будівельний матеріал"], c: 1 }
+            { q: "Яка зношеність магістральних колекторів?", a: ["25%", "50%", "75%", "90%"], c: 2 }
         ];
-
         let curQ = 0;
-        let answered = false;
-
         function startQuiz() { document.getElementById('qOverlay').style.display='flex'; renderQuestion(); }
-
         function renderQuestion() {
-            answered = false;
-            document.getElementById('nextBtn').style.display = 'none';
             const d = questions[curQ];
             document.getElementById('qContent').innerHTML = `
-                <h2 style="margin-bottom:20px; color:#fff;">${d.q}</h2>
-                <div id="options">
-                    ${d.a.map((o, i) => `<button class="option-btn" onclick="checkAnswer(${i}, this)">${o}</button>`).join('')}
-                </div>`;
+                <h2>${d.q}</h2><br>
+                ${d.a.map((o, i) => `<button class="option-btn" onclick="check(${i}, this)">${o}</button>`).join('')}`;
         }
-
-        function checkAnswer(i, btn) {
-            if(answered) return;
-            answered = true;
+        function check(i, btn) {
             const correct = questions[curQ].c;
-            const btns = document.querySelectorAll('.option-btn');
             if(i === correct) btn.classList.add('correct');
-            else { btn.classList.add('wrong'); btns[correct].classList.add('correct'); }
-            document.getElementById('nextBtn').style.display = 'inline-block';
-        }
-
-        function nextQuestion() {
-            curQ++;
-            if(curQ < questions.length) renderQuestion();
-            else { document.getElementById('qOverlay').style.display='none'; document.getElementById('final-slide').scrollIntoView(); }
+            else { 
+                btn.classList.add('wrong'); 
+                document.querySelectorAll('.option-btn')[correct].classList.add('correct');
+            }
+            setTimeout(() => { document.getElementById('qOverlay').style.display='none'; }, 2000);
         }
 
         window.onscroll = () => {
