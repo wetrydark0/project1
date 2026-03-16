@@ -81,6 +81,7 @@
         .full-info { display: none; margin-top: 20px; font-size: 1.1rem; line-height: 1.6; color: #fff; }
         .card-img { display: none; width: 100%; border-radius: 15px; margin-top: 20px; object-fit: cover; border: 1px solid var(--primary); }
 
+        /* Стилі для розгорнутої картки з фото */
         .glass-card.active {
             position: fixed;
             top: 50%; left: 50%;
@@ -99,27 +100,18 @@
         }
         
         .active-content { flex: 1; }
-        .active-media { flex: 1; display: block; }
+        .active-media { flex: 1.2; display: none; } /* Показуємо тільки в активному стані */
+
+        .glass-card.active .active-media { display: block; }
         .glass-card.active .full-info { display: block; }
-        .glass-card.active .card-img { display: block; height: 400px; margin-top: 0; }
+        .glass-card.active .card-img { display: block; height: 450px; margin-top: 0; }
         .glass-card.active .stat-num { font-size: 4rem; }
 
-        #close-layer {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            z-index: 9000; display: none;
-            background: rgba(0,0,0,0.4); backdrop-filter: blur(5px);
-        }
-
-        .progress-bar {
-            position: fixed; bottom: 0; left: 0; height: 6px;
-            background: var(--primary); width: 0%; z-index: 3000;
-        }
-
-        /* СТИЛІ ДЛЯ СЛАЙДУ З ВІДЕО */
+        /* Відео контейнер */
         .video-container {
             display: flex;
             gap: 30px;
-            align-items: center;
+            align-items: flex-start;
             background: rgba(255,255,255,0.02);
             padding: 30px;
             border-radius: 40px;
@@ -127,15 +119,26 @@
         }
 
         .video-frame { flex: 2; border-radius: 20px; overflow: hidden; border: 1px solid var(--primary); }
-        .video-stats { flex: 1; display: flex; flex-direction: column; gap: 15px; }
+        .video-stats { flex: 1; display: flex; flex-direction: column; gap: 10px; }
         
         .v-stat {
             border-left: 3px solid var(--primary);
             padding-left: 15px;
-            margin-bottom: 10px;
+            margin-bottom: 5px;
         }
         .v-stat span { font-size: 0.7rem; color: var(--primary); text-transform: uppercase; display: block; }
-        .v-stat strong { font-size: 1.2rem; color: #fff; }
+        .v-stat strong { font-size: 1.1rem; color: #fff; }
+
+        #close-layer {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            z-index: 9000; display: none;
+            background: rgba(0,0,0,0.6); backdrop-filter: blur(8px);
+        }
+
+        .progress-bar {
+            position: fixed; bottom: 0; left: 0; height: 6px;
+            background: var(--primary); width: 0%; z-index: 3000;
+        }
 
         #quiz-trigger {
             background: var(--primary); color: #000; padding: 18px 36px; 
@@ -178,32 +181,32 @@
                 <div class="glass-card" onclick="openCard(this, event)">
                     <span class="stat-num">500л</span>
                     <p class="card-desc">середня кількість побутових стоків на одну особу в містах.</p>
-                    <div class="full-info">Господарсько-побутові стічні води містять величезну кількість органічних забруднювачів та фізіологічних відходів. Основна небезпека полягає у бактеріальному забрудненні, оскільки такі стоки є ідеальним середовищем для патогенів. Це створює загрозу епідеміологічному стану цілих регіонів, що мешкають нижче за течією річок.</div>
+                    <div class="full-info">Господарсько-побутові стічні води містять величезну кількість органічних забруднювачів. Основна небезпека полягає у бактеріальному забрудненні, оскільки такі стоки є ідеальним середовищем для патогенів.</div>
                 </div>
                 <div class="glass-card" onclick="openCard(this, event)">
                     <span class="stat-num">2.5г</span>
-                    <p class="card-desc">важких металів на літр стоків металургійних підприємств.</p>
-                    <div class="full-info">Промислові стічні води містять агресивні феноли, нафтопродукти та солі важких металів, які не розкладаються. Хімічні сполуки змінюють кислотність води, роблячи її непридатною для життя будьяких водних організмів. Навіть після очищення залишаються сліди розчинників, які є канцерогенними для людей.</div>
+                    <p class="card-desc">важких металів на літр стоків підприємств.</p>
+                    <div class="full-info">Промислові стічні води містять агресивні феноли та солі важких металів, які не розкладаються. Хімічні сполуки змінюють кислотність води, роблячи її непридатною для життя.</div>
                 </div>
                 <div class="glass-card" onclick="openCard(this, event)">
                     <span class="stat-num">65%</span>
-                    <p class="card-desc">забруднень потрапляє у водойми через дощові води.</p>
-                    <div class="full-info">Ливнева каналізація змиває з доріг нафтопродукти, свинець та токсичний гумовий пил від коліс. У більшості міст ці води потрапляють у річки напряму без жодної фільтрації чи механічного очищення. Це призводить до замулювання русел та поступового перетворення глибоких річок на мертві болота.</div>
+                    <p class="card-desc">забруднень потрапляє через дощові води.</p>
+                    <div class="full-info">Ливнева каналізація змиває з доріг нафтопродукти та свинець. У більшості міст ці води потрапляють у річки напряму без жодної фільтрації.</div>
                 </div>
                 <div class="glass-card" onclick="openCard(this, event)">
                     <span class="stat-num">pH 4.5</span>
-                    <p class="card-desc">рівень кислотності стоків хімічної промисловості.</p>
-                    <div class="full-info">Кислотне забруднення вбиває корисні бактерії, що відповідають за природне самоочищення водойм від органіки. Блокування доступу кисню створює анаеробні зони, де вода чорніє та починає виділяти отруйний сірководень. Такі зони стають повністю непридатними для життя фауни на багато десятиліть.</div>
+                    <p class="card-desc">рівень кислотності стоків хімпрому.</p>
+                    <div class="full-info">Кислотне забруднення вбиває корисні бактерії. Блокування доступу кисню створює анаеробні зони, де вода чорніє та виділяє отруйний сірководень.</div>
                 </div>
                 <div class="glass-card" onclick="openCard(this, event)">
                     <span class="stat-num">800тис.</span>
-                    <p class="card-desc">мікрочастинок пластику вимивається за одне прання.</p>
-                    <div class="full-info">Мікропластик проходить крізь усі сучасні фільтри очисних споруд через свої мікроскопічні розміри. Частинки абсорбують на собі токсини і потрапляють у харчовий ланцюг риб, а згодом і людини. Накопичення пластику в організмі викликає незворотні зміни в тканинах та хронічні запалення.</div>
+                    <p class="card-desc">мікропластику вимивається за одне прання.</p>
+                    <div class="full-info">Мікропластик проходить крізь усі сучасні фільтри через свої розміри. Частинки потрапляють у харчовий ланцюг риб, а згодом і людини.</div>
                 </div>
                 <div class="glass-card" onclick="openCard(this, event)">
                     <span class="stat-num">75%</span>
-                    <p class="card-desc">зношеність магістральних колекторів у великих містах.</p>
-                    <div class="full-info">Критичний стан мереж призводить до витоку нечистот у ґрунтові води ще до того, як вони дійдуть до станції. Це спричиняє просідання доріг, руйнування фундаментів та масове забруднення колодязів у містах. Ситуація посилюється незаконними врізками підприємств, які перевантажують старі бетонні труби.</div>
+                    <p class="card-desc">зношеність магістральних колекторів.</p>
+                    <div class="full-info">Критичний стан мереж призводить до витоку нечистот у ґрунтові води. Це спричиняє руйнування фундаментів та забруднення колодязів.</div>
                 </div>
             </div>
         </section>
@@ -213,33 +216,33 @@
             <div class="grid">
                 <div class="glass-card" onclick="openCard(this, event)">
                     <span class="stat-num">Побутові</span>
-                    <p class="card-desc">Мийні засоби, гігієна та кухонні відходи.</p>
-                    <div class="full-info">Щодня у каналізацію потрапляють тонни агресивних ПАР, які руйнують захисний шар на шкірі риб. Окрім хімії, критичною проблемою є жир, який утворює гігантські пробки в міських трубопроводах. Кожна квартира сьогодні є постійним джерелом мікро-забруднення стічних вод.</div>
+                    <p class="card-desc">Мийні засоби та кухонні відходи.</p>
+                    <div class="full-info">Щодня у каналізацію потрапляють тонни ПАР. Окрім хімії, проблемою є жир, який утворює гігантські пробки в міських трубопроводах.</div>
                 </div>
                 <div class="glass-card" onclick="openCard(this, event)">
                     <span class="stat-num">Пром-стоки</span>
-                    <p class="card-desc">Важкі метали, кислоти та нафтопродукти.</p>
-                    <div class="full-info">Заводи часто скидають воду з вмістом кадмію та ртуті, які неможливо видалити звичайними бактеріями. Промислові стоки буквально випалюють життя в річці навколо місця скиду хімікатів. Ці сполуки накопичуються в річковому мулі, отруюючи воду протягом багатьох поколінь.</div>
+                    <p class="card-desc">Важкі метали та кислоти.</p>
+                    <div class="full-info">Заводи скидають воду з вмістом кадмію та ртуті. Ці сполуки накопичуються в річковому мулі, отруюючи воду протягом багатьох поколінь.</div>
                 </div>
                 <div class="glass-card" onclick="openCard(this, event)">
                     <span class="stat-num" style="color: #ff4d4d;">Аварійні</span>
-                    <p class="card-desc">Прориви колекторів та витоки каналізації.</p>
-                    <div class="full-info">Через зношеність труб стаються залпові викиди сирої каналізації прямо у підземні джерела. Такі аварії миттєво заражають питні горизонти кишковою паличкою та небезпечними вірусами. Ліквідація наслідків просочування нечистот у ґрунт може тривати місяцями.</div>
+                    <p class="card-desc">Прориви та витоки каналізації.</p>
+                    <div class="full-info">Через зношеність труб стаються залпові викиди сирої каналізації. Такі аварії миттєво заражають питні горизонти кишковою паличкою.</div>
                 </div>
                 <div class="glass-card" onclick="openCard(this, event)">
-                    <span class="stat-num">Фармацевтика</span>
-                    <p class="card-desc">Залишки ліків та антибіотиків у воді.</p>
-                    <div class="full-info">Активні компоненти ліків виводяться в каналізацію, оскільки організм не засвоює їх повністю. Антибіотики у стоках створюють "супербактерії", які стають стійкими до будьяких відомих ліків. Традиційні очисні споруди поки що не мають технологій для фільтрації фармацевтичного сліду.</div>
+                    <span class="stat-num">Фармація</span>
+                    <p class="card-desc">Залишки ліків у воді.</p>
+                    <div class="full-info">Антибіотики у стоках створюють "супербактерії", які стійкі до ліків. Традиційні споруди не мають технологій для їх фільтрації.</div>
                 </div>
                 <div class="glass-card" onclick="openCard(this, event)">
                     <span class="stat-num">Е-відходи</span>
-                    <p class="card-desc">Вимивання токсинів зі звалищ електроніки.</p>
-                    <div class="full-info">Дощова вода вимиває з покинутих акумуляторів та плат небезпечний літій, миш'як і кобальт. Ці специфічні стоки потрапляють у ливневі канали без жодної попередньої нейтралізації хімікатів. Одна викинута батарейка здатна зробити токсичними стічні води на величезній площі.</div>
+                    <p class="card-desc">Токсини зі звалищ електроніки.</p>
+                    <div class="full-info">Дощова вода вимиває з покинутих акумуляторів літій та миш'як. Одна батарейка робить токсичними води на величезній площі.</div>
                 </div>
                 <div class="glass-card" onclick="openCard(this, event)">
                     <span class="stat-num">Агро-стоки</span>
-                    <p class="card-desc">Стоки м'ясокомбінатів та молочних заводів.</p>
-                    <div class="full-info">Харчова промисловість генерує стоки з екстремальною концентрацією органіки, що дуже швидко гниє. Така вода споживає кисень у річці в десять разів інтенсивніше за побутові відходи. Без спеціальних жировловлювачів ці підприємства перетворюють воду на липку токсичну суміш.</div>
+                    <p class="card-desc">Відходи м'ясокомбінатів.</p>
+                    <div class="full-info">Харчова промисловість генерує стоки з високою концентрацією органіки. Така вода споживає кисень у річці в 10 разів інтенсивніше.</div>
                 </div>
             </div>
         </section>
@@ -250,64 +253,64 @@
                 <div class="glass-card" onclick="openCard(this, event)">
                     <div class="active-content">
                         <span class="stat-num">Етап 1</span>
-                        <p class="card-desc">Механічна фільтрація великого сміття.</p>
-                        <div class="full-info">На першому етапі вода проходить через автоматизовані решітки та пісковловлювачі. Тут видаляється пластик, папір, каміння та пісок. Це критично важливо для захисту насосів від пошкоджень, проте на цьому етапі вода все ще залишається хімічно брудною та небезпечною.</div>
+                        <p class="card-desc">Механічна фільтрація сміття.</p>
+                        <div class="full-info">Вода проходить через решітки та пісковловлювачі. Тут видаляється пластик, каміння та пісок. Це захищає насоси від пошкоджень.</div>
                     </div>
                     <div class="active-media">
-                        <img src="Images1/step1.jpg" class="card-img" alt="Механічне очищення">
+                        <img src="Images1/step1.jpg" class="card-img" alt="Етап 1">
                     </div>
                 </div>
                 <div class="glass-card" onclick="openCard(this, event)">
                     <div class="active-content">
                         <span class="stat-num">Етап 2</span>
-                        <p class="card-desc">Біологічне очищення активним мулом.</p>
-                        <div class="full-info">Це «серце» очисної станції. У спеціальних басейнах (аеротенках) живуть мільярди мікроорганізмів, які поїдають органічні забруднювачі. Вони перетворюють шкідливі відходи на нешкідливий газ та надлишковий мул. Без цього етапу річки б миттєво зацвітали та гинули.</div>
+                        <p class="card-desc">Біологічне очищення мулом.</p>
+                        <div class="full-info">В аеротенках мільярди мікроорганізмів "поїдають" органіку. Це серце станції, де вода стає екологічно безпечною.</div>
                     </div>
                     <div class="active-media">
-                        <img src="Images1/step2.jpg" class="card-img" alt="Біологічне очищення">
+                        <img src="Images1/step2.jpg" class="card-img" alt="Етап 2">
                     </div>
                 </div>
                 <div class="glass-card" onclick="openCard(this, event)">
                     <div class="active-content">
                         <span class="stat-num">Етап 3</span>
-                        <p class="card-desc">Хімічне знезараження та скид.</p>
-                        <div class="full-info">На фінальній стадії воду очищують від фосфатів та залишків бактерій за допомогою ультрафіолету або спеціальних реагентів. Тільки після цього вода стає достатньо безпечною, щоб її можна було повернути в природне середовище, не порушуючи екосистему річки.</div>
+                        <p class="card-desc">Хімічне знезараження.</p>
+                        <div class="full-info">Фінальна очистка від фосфатів та бактерій за допомогою УФ-променів або реагентів перед скидом у річку.</div>
                     </div>
                     <div class="active-media">
-                        <img src="Images1/step3.jpg" class="card-img" alt="Хімічне очищення">
+                        <img src="Images1/step3.jpg" class="card-img" alt="Етап 3">
                     </div>
                 </div>
             </div>
         </section>
 
         <section id="s5">
-            <h2 style="text-align: center;">МОНІТОРИНГ СТОКІВ</h2>
+            <h2 style="text-align: center;">ТЕХНОЛОГІЧНИЙ МОНІТОРИНГ</h2>
             <div class="video-container">
                 <div class="video-frame">
                     <video style="width: 100%; display: block;" controls loop muted autoplay>
-                        <source src="video/waste.mp4">
+                        <source src="video/waste.mp4" type="video/mp4">
+                        Ваш браузер не підтримує відео.
                     </video>
                 </div>
                 <div class="video-stats">
+                    <h3 style="color: var(--primary); font-size: 1rem; margin-bottom: 10px;">ДАНІ АНАЛІЗУ:</h3>
                     <div class="v-stat">
-                        <span>Статус системи</span>
-                        <strong>ONLINE</strong>
+                        <span>Прозорість (NTU)</span>
+                        <strong>1.5 — Оптимально</strong>
                     </div>
                     <div class="v-stat">
-                        <span>Контроль фосфатів</span>
-                        <strong>0.03 мг/л (НОРМА)</strong>
+                        <span>Активний мул</span>
+                        <strong>3500 мг/л — Робочий стан</strong>
                     </div>
-                    <div class="v-stat">
-                        <span>Кислотність (pH)</span>
-                        <strong>7.2 (НЕЙТРАЛЬНО)</strong>
+                    <div class="v-stat" style="border-left-color: #ffbc39;">
+                        <span>Рівень кисню</span>
+                        <strong>2.1 мг/л — Потребує уваги</strong>
                     </div>
-                    <div class="v-stat">
-                        <span>Бактеріальний фон</span>
-                        <strong>НИЗЬКИЙ</strong>
+                    <div style="margin-top: 15px; padding: 15px; background: rgba(180, 255, 57, 0.1); border-radius: 15px;">
+                        <p style="font-size: 0.85rem; line-height: 1.4;">
+                            <strong>Що ми бачимо?</strong> Моніторинг дозволяє вчасно виявити токсичні викиди, які можуть вбити активний мул та зупинити роботу станції.
+                        </p>
                     </div>
-                    <p style="font-size: 0.8rem; color: #888; margin-top: 20px;">
-                        Автоматизована система моніторингу дозволяє виявити викиди шкідливих речовин у режимі реального часу, запобігаючи екологічним катастрофам.
-                    </p>
                 </div>
             </div>
         </section>
@@ -331,19 +334,23 @@
         function openCard(card, event) {
             if(card.classList.contains('active')) return;
             event.stopPropagation();
+            
             document.getElementById('main-content').style.opacity = '0';
             document.getElementById('main-content').style.pointerEvents = 'none';
             document.getElementById('close-layer').style.display = 'block';
+            
             const clone = card.cloneNode(true);
             clone.classList.add('active');
             clone.id = "active-modal";
             document.body.appendChild(clone);
+            
             document.body.classList.add('no-scroll');
         }
 
         function closeAllCards() {
             const modal = document.getElementById('active-modal');
             if(!modal) return;
+
             modal.remove();
             document.getElementById('close-layer').style.display = 'none';
             document.getElementById('main-content').style.opacity = '1';
