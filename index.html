@@ -14,13 +14,13 @@
         :root {
             --primary: #b4ff39;
             --bg: #05070a;
-            --card: rgba(255, 255, 255, 0.03); /* Glassmorphism 2.0: Трохи прозоріше */
+            --card: rgba(255, 255, 255, 0.03); 
             --text: #ffffff;
             --error: #ff4d4d;
             --success: #2ecc71;
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; cursor: none !important; } /* Приховуємо стандартний курсор */
+        * { margin: 0; padding: 0; box-sizing: border-box; cursor: none !important; } 
 
         html { 
             scroll-snap-type: y mandatory; 
@@ -34,15 +34,14 @@
             color: var(--text);
             font-family: 'Plus Jakarta Sans', sans-serif;
             overflow-x: hidden;
+            perspective: 1000px; /* Для 3D ефектів */
         }
 
-        /* КОНТЕЙНЕР ДЛЯ ЧАСТОК */
         #particles-js {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             z-index: -1;
         }
 
-        /* КАСТОМНИЙ КУРСОР */
         #custom-cursor {
             width: 20px; height: 20px;
             background: var(--primary);
@@ -51,7 +50,6 @@
             pointer-events: none;
             z-index: 99999;
             mix-blend-mode: difference;
-            transition: transform 0.1s ease;
         }
 
         .bg-glow {
@@ -73,20 +71,6 @@
             position: relative;
         }
 
-        /* ГЛІЧ-ЕФЕКТ ПРИ НАВЕДЕННІ */
-        h1:hover {
-            animation: glitch 0.3s cubic-bezier(.25, .46, .45, .94) both infinite;
-        }
-
-        @keyframes glitch {
-            0% { transform: translate(0); }
-            20% { transform: translate(-2px, 2px); text-shadow: 2px 0 red; }
-            40% { transform: translate(-2px, -2px); text-shadow: -2px 0 blue; }
-            60% { transform: translate(2px, 2px); text-shadow: 2px 0 green; }
-            80% { transform: translate(2px, -2px); text-shadow: -2px 0 yellow; }
-            100% { transform: translate(0); }
-        }
-
         h1 {
             font-family: 'Montserrat', sans-serif;
             line-height: 0.9; text-transform: uppercase;
@@ -103,21 +87,31 @@
             margin-top: 20px;
         }
 
-        /* Glassmorphism 2.0 */
         .glass-card {
             background: var(--card);
             backdrop-filter: blur(20px) saturate(160%);
             border: 1px solid rgba(180, 255, 57, 0.1);
             padding: 25px; border-radius: 20px;
             cursor: pointer;
-            transition: border-color 0.3s ease, background 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            transform-style: preserve-3d;
+            transition: border-color 0.3s ease;
         }
 
-        .stat-num { font-size: 1.8rem; font-weight: 900; color: var(--primary); display: block; margin-bottom: 10px; text-transform: uppercase; }
-        .card-desc { font-size: 0.9rem; color: #ccc; }
+        /* Glow-слід всередині картки */
+        .card-glow {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: radial-gradient(circle at var(--mouse-x) var(--mouse-y), rgba(180, 255, 57, 0.12), transparent 50%);
+            pointer-events: none;
+        }
+
+        .stat-num { font-size: 1.8rem; font-weight: 900; color: var(--primary); display: block; margin-bottom: 10px; text-transform: uppercase; pointer-events: none;}
+        .card-desc { font-size: 0.9rem; color: #ccc; pointer-events: none;}
         .full-info { display: none; margin-top: 20px; font-size: 1.1rem; line-height: 1.6; color: #fff; }
 
-        /* ВІДКРИТИЙ БЛОК */
         .glass-card.active {
             position: fixed;
             top: 50%; left: 50%;
@@ -185,7 +179,6 @@
             background: var(--primary); width: 0%; z-index: 3000;
         }
 
-        /* ВІКТОРИНА */
         .quiz-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(5, 7, 10, 0.98); z-index: 10000;
@@ -257,31 +250,37 @@
             <h2>Класифікація та Вплив Стоків</h2>
             <div class="grid">
                 <div class="glass-card" onclick="openCard(this, event)">
+                    <div class="card-glow"></div>
                     <span class="stat-num">500л</span>
                     <p class="card-desc">середня кількість побутових стоків на одну особу в містах.</p>
                     <div class="full-info">Господарсько-побутові стічні води містять величезну кількість органічних забруднювачів. Очищення таких об'ємів потребує значних енергетичних ресурсів та постійного моніторингу стану води. Основна небезпека полягає у бактеріальному забрудненні, яке швидко поширюється у водних артеріях. Без належної фільтрації ці стоки стають причиною масових екологічних криз у населених пунктах.</div>
                 </div>
                 <div class="glass-card" onclick="openCard(this, event)">
+                    <div class="card-glow"></div>
                     <span class="stat-num">2.5г</span>
                     <p class="card-desc">важких металів на літр стоків підприємств.</p>
                     <div class="full-info">Промислові стічні води містять агресивні феноли та токсичні солі важких металів. Ці речовини мають здатність накопичуватися в донних відкладеннях річок протягом десятків років. Подібне хімічне навантаження практично повністю знищує природну здатність водойми до самоочищення. Навіть мікроскопічні дози таких металів з часом призводять до незворотних мутацій у місцевої фауни.</div>
                 </div>
                 <div class="glass-card" onclick="openCard(this, event)">
+                    <div class="card-glow"></div>
                     <span class="stat-num">65%</span>
                     <p class="card-desc">забруднень потрапляє через дощові води.</p>
                     <div class="full-info">Зливова каналізація змиває з міських доріг величезну кількість нафтопродуктів та технічного пилу. Більшість цих потоків потрапляє прямо у річки без жодної попередньої фільтрації чи обробки. Окрім палива, дощова вода переносить солі, якими посипають дороги під час ожеледиці взимку. Це створює раптові та потужні "удари" по екосистемі після кожного сильного літнього дощу.</div>
                 </div>
                 <div class="glass-card" onclick="openCard(this, event)">
+                    <div class="card-glow"></div>
                     <span class="stat-num">pH 4.5</span>
                     <p class="card-desc">рівень кислотності стоків хімпрому.</p>
                     <div class="full-info">Кислотне забруднення агресивно вбиває корисні бактерії, що відповідають за природне самоочищення води. Це створює так звані мертві анаеробні зони, де життя стає неможливим для будь-яких організмів. Порушення кислотного балансу також прискорює корозію металевих труб та бетонних конструкцій очисних споруд. Відновлення екосистеми після такого хімічного опіку може тривати багато десятиліть поспіль.</div>
                 </div>
                 <div class="glass-card" onclick="openCard(this, event)">
+                    <div class="card-glow"></div>
                     <span class="stat-num">800тис.</span>
                     <p class="card-desc">мікропластику вимивається за одне прання.</p>
                     <div class="full-info">Мікропластик легко проходить крізь стандартні фільтри очисних споруд через свої надмалі розміри. Ці частинки швидко потрапляють у глобальний харчовий ланцюг, починаючи з планктону та дрібної риби. У організмі людини ці сполуки можуть викликати хронічні запалення та серйозні гормональні розлади. Боротьба з цим видом забруднення вимагає впровадження принципово нових технологій молекулярної фільтрації.</div>
                 </div>
                 <div class="glass-card" onclick="openCard(this, event)">
+                    <div class="card-glow"></div>
                     <span class="stat-num">75%</span>
                     <p class="card-desc">зношеність магістральних колекторів.</p>
                     <div class="full-info">Критичний стан інженерних мереж призводить до постійних витоків нечистот у навколишній ґрунт. Ці витоки отруюють підземні водоносні горизонти, які часто використовуються як джерела питної води. Масштабна руйнація труб загрожує повною зупинкою роботи централізованих систем водовідведення у великих містах. Модернізація цієї інфраструктури є першочерговим завданням для збереження екологічної безпеки всієї країни.</div>
@@ -293,31 +292,37 @@
             <h2>Джерела забруднення</h2>
             <div class="grid">
                 <div class="glass-card" onclick="openCard(this, event)">
+                    <div class="card-glow"></div>
                     <span class="stat-num">Побутові</span>
                     <p class="card-desc">головне джерело фосфатів та органіки.</p>
                     <div class="full-info">Фосфати з миючих засобів провокують бурхливе "цвітіння" водойм, що поглинає весь доступний кисень. Це явище стає причиною масової загибелі риби та інших водних мешканців через задуху. Крім того, велика кількість органіки сприяє розвитку патогенних мікроорганізмів та небезпечних вірусів. Сучасні побутові звички людства вимагають перегляду складу всієї побутової хімії на користь екологічності.</div>
                 </div>
                 <div class="glass-card" onclick="openCard(this, event)">
+                    <div class="card-glow"></div>
                     <span class="stat-num">Заводи</span>
                     <p class="card-desc">викиди важких металів та токсинів.</p>
                     <div class="full-info">Складні синтетичні сполуки з фабрик мають властивість роками накопичуватися в живих тканинах тварин. Виробничі цикли часто передбачають використання великої кількості води, яка після використання стає отруйною. Без закритих циклів водопостачання підприємства щоденно скидають тисячі тонн хімікатів у відкриті водойми. Вплив таких токсинів на здоров'я людей, що живуть нижче за течією, часто є критичним.</div>
                 </div>
                 <div class="glass-card" onclick="openCard(this, event)">
+                    <div class="card-glow"></div>
                     <span class="stat-num">Агро</span>
                     <p class="card-desc">пестициди та азотні добрива з полів.</p>
                     <div class="full-info">Висока концентрація нітратів у стічних водах робить річкову воду абсолютно непридатною для пиття. Пестициди, що змиваються під час поливу чи дощів, знищують не лише шкідників, а й річкову флору. Це призводить до руйнації природних середовищ існування та збіднення біологічного різноманіття регіону. Контроль за використанням хімікатів у сільському господарстві є ключовим для захисту наших водних ресурсів.</div>
                 </div>
                 <div class="glass-card" onclick="openCard(this, event)">
+                    <div class="card-glow"></div>
                     <span class="stat-num">Сміття</span>
                     <p class="card-desc">токсичний фільтрат з полігонів відходів.</p>
                     <div class="full-info">Продукти гниття відходів на звалищах утворюють концентрований отруйний сік, що просочується крізь ґрунт. Цей фільтрат здатний отруювати колодязі та артезіанські свердловини на відстані десятків кілометрів навколо. Вміст шкідливих речовин у такому "коктейлі" часто перевищує всі допустимі норми у тисячі разів. Правильне облаштування полігонів з гідроізоляцією є єдиним способом запобігти цій прихованій катастрофі.</div>
                 </div>
                 <div class="glass-card" onclick="openCard(this, event)">
+                    <div class="card-glow"></div>
                     <span class="stat-num">Дороги</span>
                     <p class="card-desc">нафтопродукти та солі зі зливостоків.</p>
                     <div class="full-info">Паливно-мастильні матеріали утворюють тонку масляну плівку на поверхні води, перекриваючи доступ кисню. Через це порушується процес газообміну, що призводить до деградації підводних рослин та організмів. Також з доріг змивається велика кількість важких металів від зносу автомобільних шин та гальм. Встановлення спеціальних нафтовловлювачів на випусках зливостоків могло б значно знизити це навантаження.</div>
                 </div>
                 <div class="glass-card" onclick="openCard(this, event)">
+                    <div class="card-glow"></div>
                     <span class="stat-num">Пластик</span>
                     <p class="card-desc">мікрочастинки, що накопичуються в рибі.</p>
                     <div class="full-info">Морські та річкові тварини часто плутають дрібні шматочки пластику із своєю природною їжею. Це призводить до механічної закупорки травної системи та подальшої болісної загибелі живих істот. Окрім механічної шкоди, пластик виділяє токсичні барвники та стабілізатори прямо в кров організму. Зменшення використання одноразового пластику — це найпростіший крок, який може зробити кожен з нас.</div>
@@ -329,6 +334,7 @@
             <h2>Процес очищення</h2>
             <div class="grid">
                 <div class="glass-card" onclick="openCard(this, event)">
+                    <div class="card-glow"></div>
                     <span class="stat-num">ЕТАП 1</span>
                     <p class="card-desc">Механічна фільтрація великого сміття.</p>
                     <div class="full-info">
@@ -339,6 +345,7 @@
                     </div>
                 </div>
                 <div class="glass-card" onclick="openCard(this, event)">
+                    <div class="card-glow"></div>
                     <span class="stat-num">ЕТАП 2</span>
                     <p class="card-desc">Біологічне очищення активним мулом.</p>
                     <div class="full-info">
@@ -349,6 +356,7 @@
                     </div>
                 </div>
                 <div class="glass-card" onclick="openCard(this, event)">
+                    <div class="card-glow"></div>
                     <span class="stat-num">ЕТАП 3</span>
                     <p class="card-desc">Вторинне відстоювання та дезінфекція.</p>
                     <div class="full-info">
@@ -403,7 +411,7 @@
     </div>
 
     <script>
-        // 1. ПАРТІКЛИ (ЧАСТКИ) НА ФОНІ
+        // 1. ПАРТІКЛИ
         particlesJS('particles-js', {
             "particles": {
                 "number": { "value": 80 },
@@ -419,59 +427,54 @@
             }
         });
 
-        // 2. КАСТОМНИЙ КУРСОР ТА МАГНІТНИЙ ЕФЕКТ
+        // 2. КУРСОР ТА ЕФЕКТИ КАРТОК (TILT + GLOW)
         const cursor = document.getElementById('custom-cursor');
         document.addEventListener('mousemove', (e) => {
             gsap.to(cursor, { x: e.clientX, y: e.clientY, duration: 0.1 });
         });
 
-        // Магнітність для всіх кнопок та карток
-        const magnetics = document.querySelectorAll('button, .glass-card');
-        magnetics.forEach(el => {
-            el.addEventListener('mousemove', (e) => {
-                const rect = el.getBoundingClientRect();
-                const x = e.clientX - rect.left - rect.width / 2;
-                const y = e.clientY - rect.top - rect.height / 2;
-                gsap.to(el, { x: x * 0.2, y: y * 0.2, duration: 0.3 });
-                gsap.to(cursor, { scale: 3, backgroundColor: "transparent", border: "1px solid #b4ff39", duration: 0.3 });
+        const cards = document.querySelectorAll('.glass-card');
+        cards.forEach(card => {
+            card.addEventListener('mousemove', (e) => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+
+                // Оновлюємо CSS змінні для Glow-сліду
+                card.style.setProperty('--mouse-x', `${x}px`);
+                card.style.setProperty('--mouse-y', `${y}px`);
+
+                // Розрахунок Tilt (3D нахил)
+                const centerX = rect.width / 2;
+                const centerY = rect.height / 2;
+                const rotateX = (y - centerY) / 10;
+                const rotateY = (centerX - x) / 10;
+
+                gsap.to(card, {
+                    rotateX: rotateX,
+                    rotateY: rotateY,
+                    scale: 1.02,
+                    duration: 0.4,
+                    ease: "power2.out"
+                });
+
+                gsap.to(cursor, { scale: 3, backgroundColor: "transparent", border: "1px solid #b4ff39" });
             });
-            el.addEventListener('mouseleave', () => {
-                gsap.to(el, { x: 0, y: 0, duration: 0.3 });
-                gsap.to(cursor, { scale: 1, backgroundColor: "#b4ff39", border: "none", duration: 0.3 });
+
+            card.addEventListener('mouseleave', () => {
+                gsap.to(card, { rotateX: 0, rotateY: 0, scale: 1, duration: 0.5 });
+                gsap.to(cursor, { scale: 1, backgroundColor: "#b4ff39", border: "none" });
             });
         });
 
-        // 3. REVEAL АНІМАЦІЇ ПРИ СКРОЛІ (GSAP)
+        // 3. REVEAL АНІМАЦІЇ
         gsap.registerPlugin(ScrollTrigger);
-
-        // Поява карток по черзі
         gsap.from(".glass-card", {
-            scrollTrigger: {
-                trigger: ".grid",
-                start: "top 85%",
-            },
-            y: 80,
-            opacity: 0,
-            stagger: 0.1,
-            duration: 1,
-            ease: "power4.out"
+            scrollTrigger: { trigger: ".grid", start: "top 85%" },
+            y: 80, opacity: 0, stagger: 0.1, duration: 1, ease: "power4.out"
         });
 
-        // Поява заголовків
-        document.querySelectorAll('h2').forEach(h2 => {
-            gsap.from(h2, {
-                scrollTrigger: {
-                    trigger: h2,
-                    start: "top 90%",
-                },
-                x: -50,
-                opacity: 0,
-                filter: "blur(10px)",
-                duration: 1.2
-            });
-        });
-
-        // ТВОЇ ФУНКЦІЇ ДЛЯ КАРТОК (БЕЗ ЗМІН)
+        // 4. ФУНКЦІЇ КАРТОК + STAGGERED REVEAL
         function openCard(card, event) {
             if(card.classList.contains('active')) return;
             event.stopPropagation();
@@ -482,6 +485,17 @@
             clone.classList.add('active');
             clone.id = "active-modal";
             document.body.appendChild(clone);
+            
+            // Staggered Text Reveal анімація
+            gsap.from("#active-modal .stat-num, #active-modal .card-desc, #active-modal .full-info", {
+                opacity: 0,
+                y: 30,
+                stagger: 0.15,
+                duration: 0.8,
+                ease: "power3.out",
+                delay: 0.2
+            });
+
             document.body.classList.add('no-scroll');
         }
 
@@ -494,6 +508,7 @@
             document.body.classList.remove('no-scroll');
         }
 
+        // ВІКТОРИНА (БЕЗ ЗМІН)
         const questions = [
             { q: "Яку роль відіграє активний мул на другому етапі очищення?", a: ["Механічне відсіювання дрібних часток пластику", "Окиснення органічних сполук колоніями бактерій", "Хімічне осадження солей важких металів", "Зміна рівня кислотності для дезінфекції"], c: 1 },
             { q: "Який показник зношеності магістральних колекторів є критичним для міст?", a: ["Близько 25%", "Понад 50%", "Приблизно 75%", "Майже 95%"], c: 2 },
