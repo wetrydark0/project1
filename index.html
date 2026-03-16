@@ -4,19 +4,23 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ЕКО-СИСТЕМА 2026</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@900&family=Plus+Jakarta+Sans:wght@300;500;800&display=swap');
 
         :root {
             --primary: #b4ff39;
             --bg: #05070a;
-            --card: rgba(255, 255, 255, 0.05);
+            --card: rgba(255, 255, 255, 0.03); /* Glassmorphism 2.0: Трохи прозоріше */
             --text: #ffffff;
             --error: #ff4d4d;
             --success: #2ecc71;
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        * { margin: 0; padding: 0; box-sizing: border-box; cursor: none !important; } /* Приховуємо стандартний курсор */
 
         html { 
             scroll-snap-type: y mandatory; 
@@ -30,6 +34,24 @@
             color: var(--text);
             font-family: 'Plus Jakarta Sans', sans-serif;
             overflow-x: hidden;
+        }
+
+        /* КОНТЕЙНЕР ДЛЯ ЧАСТОК */
+        #particles-js {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -1;
+        }
+
+        /* КАСТОМНИЙ КУРСОР */
+        #custom-cursor {
+            width: 20px; height: 20px;
+            background: var(--primary);
+            border-radius: 50%;
+            position: fixed;
+            pointer-events: none;
+            z-index: 99999;
+            mix-blend-mode: difference;
+            transition: transform 0.1s ease;
         }
 
         .bg-glow {
@@ -51,6 +73,20 @@
             position: relative;
         }
 
+        /* ГЛІЧ-ЕФЕКТ ПРИ НАВЕДЕННІ */
+        h1:hover {
+            animation: glitch 0.3s cubic-bezier(.25, .46, .45, .94) both infinite;
+        }
+
+        @keyframes glitch {
+            0% { transform: translate(0); }
+            20% { transform: translate(-2px, 2px); text-shadow: 2px 0 red; }
+            40% { transform: translate(-2px, -2px); text-shadow: -2px 0 blue; }
+            60% { transform: translate(2px, 2px); text-shadow: 2px 0 green; }
+            80% { transform: translate(2px, -2px); text-shadow: -2px 0 yellow; }
+            100% { transform: translate(0); }
+        }
+
         h1 {
             font-family: 'Montserrat', sans-serif;
             line-height: 0.9; text-transform: uppercase;
@@ -67,17 +103,16 @@
             margin-top: 20px;
         }
 
+        /* Glassmorphism 2.0 */
         .glass-card {
             background: var(--card);
-            backdrop-filter: blur(15px);
-            border: 1px solid rgba(255,255,255,0.1);
+            backdrop-filter: blur(20px) saturate(160%);
+            border: 1px solid rgba(180, 255, 57, 0.1);
             padding: 25px; border-radius: 20px;
             cursor: pointer;
-            transition: transform 0.3s ease, border-color 0.3s ease;
+            transition: border-color 0.3s ease, background 0.3s ease;
         }
 
-        .glass-card:hover { border-color: var(--primary); transform: translateY(-5px); }
-        
         .stat-num { font-size: 1.8rem; font-weight: 900; color: var(--primary); display: block; margin-bottom: 10px; text-transform: uppercase; }
         .card-desc { font-size: 0.9rem; color: #ccc; }
         .full-info { display: none; margin-top: 20px; font-size: 1.1rem; line-height: 1.6; color: #fff; }
@@ -86,7 +121,7 @@
         .glass-card.active {
             position: fixed;
             top: 50%; left: 50%;
-            transform: translate(-50%, -50%);
+            transform: translate(-50%, -50%) !important;
             width: 90%; max-width: 900px;
             z-index: 9999;
             background: #05070a;
@@ -195,6 +230,8 @@
 </head>
 <body>
 
+    <div id="particles-js"></div>
+    <div id="custom-cursor"></div>
     <div class="bg-glow"></div>
     <div id="close-layer" onclick="closeAllCards()"></div>
     <div class="progress-bar" id="progressBar"></div>
@@ -356,7 +393,9 @@
                 </button>
             </div>
         </section>
-    </div> <div class="quiz-overlay" id="qOverlay">
+    </div>
+
+    <div class="quiz-overlay" id="qOverlay">
         <div class="quiz-card">
             <div id="qContent"></div>
             <button class="next-btn" id="nextBtn" onclick="nextQuestion()">НАСТУПНЕ ПИТАННЯ</button>
@@ -364,7 +403,75 @@
     </div>
 
     <script>
-        // Тут залишається твій скрипт без змін
+        // 1. ПАРТІКЛИ (ЧАСТКИ) НА ФОНІ
+        particlesJS('particles-js', {
+            "particles": {
+                "number": { "value": 80 },
+                "color": { "value": "#b4ff39" },
+                "shape": { "type": "circle" },
+                "opacity": { "value": 0.2 },
+                "size": { "value": 3 },
+                "line_linked": { "enable": true, "distance": 150, "color": "#b4ff39", "opacity": 0.1, "width": 1 },
+                "move": { "enable": true, "speed": 1.5 }
+            },
+            "interactivity": {
+                "events": { "onhover": { "enable": true, "mode": "grab" } }
+            }
+        });
+
+        // 2. КАСТОМНИЙ КУРСОР ТА МАГНІТНИЙ ЕФЕКТ
+        const cursor = document.getElementById('custom-cursor');
+        document.addEventListener('mousemove', (e) => {
+            gsap.to(cursor, { x: e.clientX, y: e.clientY, duration: 0.1 });
+        });
+
+        // Магнітність для всіх кнопок та карток
+        const magnetics = document.querySelectorAll('button, .glass-card');
+        magnetics.forEach(el => {
+            el.addEventListener('mousemove', (e) => {
+                const rect = el.getBoundingClientRect();
+                const x = e.clientX - rect.left - rect.width / 2;
+                const y = e.clientY - rect.top - rect.height / 2;
+                gsap.to(el, { x: x * 0.2, y: y * 0.2, duration: 0.3 });
+                gsap.to(cursor, { scale: 3, backgroundColor: "transparent", border: "1px solid #b4ff39", duration: 0.3 });
+            });
+            el.addEventListener('mouseleave', () => {
+                gsap.to(el, { x: 0, y: 0, duration: 0.3 });
+                gsap.to(cursor, { scale: 1, backgroundColor: "#b4ff39", border: "none", duration: 0.3 });
+            });
+        });
+
+        // 3. REVEAL АНІМАЦІЇ ПРИ СКРОЛІ (GSAP)
+        gsap.registerPlugin(ScrollTrigger);
+
+        // Поява карток по черзі
+        gsap.from(".glass-card", {
+            scrollTrigger: {
+                trigger: ".grid",
+                start: "top 85%",
+            },
+            y: 80,
+            opacity: 0,
+            stagger: 0.1,
+            duration: 1,
+            ease: "power4.out"
+        });
+
+        // Поява заголовків
+        document.querySelectorAll('h2').forEach(h2 => {
+            gsap.from(h2, {
+                scrollTrigger: {
+                    trigger: h2,
+                    start: "top 90%",
+                },
+                x: -50,
+                opacity: 0,
+                filter: "blur(10px)",
+                duration: 1.2
+            });
+        });
+
+        // ТВОЇ ФУНКЦІЇ ДЛЯ КАРТОК (БЕЗ ЗМІН)
         function openCard(card, event) {
             if(card.classList.contains('active')) return;
             event.stopPropagation();
@@ -388,36 +495,12 @@
         }
 
         const questions = [
-            { 
-                q: "Яку роль відіграє активний мул на другому етапі очищення?", 
-                a: ["Механічне відсіювання дрібних часток пластику", "Окиснення органічних сполук колоніями бактерій", "Хімічне осадження солей важких металів", "Зміна рівня кислотності для дезінфекції"], 
-                c: 1 
-            },
-            { 
-                q: "Який показник зношеності магістральних колекторів є критичним для міст?", 
-                a: ["Близько 25%", "Понад 50%", "Приблизно 75%", "Майже 95%"], 
-                c: 2 
-            },
-            { 
-                q: "Чому мікропластик вважається прихованою загрозою для екосистеми?", 
-                a: ["Він блокує роботу насосних станцій", "Накопичується в тканинах через харчові ланцюги", "Змінює колір води у відкритих водоймах", "Підвищує температуру стічних вод"], 
-                c: 1 
-            },
-            { 
-                q: "Яке обладнання захищає насоси від пошкоджень на першому етапі?", 
-                a: ["Автоматизовані решітки та пісковловлювачі", "Аеротенки з постійною подачею кисню", "Ультрафіолетові випромінювачі", "Вторинні відстійники мулу"], 
-                c: 0 
-            },
-            { 
-                q: "Які сполуки з аграрного сектору є найбільш небезпечними для питної води?", 
-                a: ["Нафтопродукти та технічний пил", "Пестициди та висока концентрація нітратів", "Побутова хімія та фосфати", "Залишки будівельних матеріалів"], 
-                c: 1 
-            },
-            { 
-                q: "Які наслідки має зниження pH стічних вод до 4.5 одиниць?", 
-                a: ["Прискорення процесів самоочищення водойми", "Зменшення корозії металевих конструкцій", "Створення анаеробних зон та загибель мікрофлори", "Нейтралізація токсичних сполук фосфору"], 
-                c: 2 
-            }
+            { q: "Яку роль відіграє активний мул на другому етапі очищення?", a: ["Механічне відсіювання дрібних часток пластику", "Окиснення органічних сполук колоніями бактерій", "Хімічне осадження солей важких металів", "Зміна рівня кислотності для дезінфекції"], c: 1 },
+            { q: "Який показник зношеності магістральних колекторів є критичним для міст?", a: ["Близько 25%", "Понад 50%", "Приблизно 75%", "Майже 95%"], c: 2 },
+            { q: "Чому мікропластик вважається прихованою загрозою для екосистеми?", a: ["Він блокує роботу насосних станцій", "Накопичується в тканинах через харчові ланцюги", "Змінює колір води у відкритих водоймах", "Підвищує температуру стічних вод"], c: 1 },
+            { q: "Яке обладнання захищає насоси від пошкоджень на першому етапі?", a: ["Автоматизовані решітки та пісковловлювачі", "Аеротенки з постійною подачею кисню", "Ультрафіолетові випромінювачі", "Вторинні відстійники мулу"], c: 0 },
+            { q: "Які сполуки з аграрного сектору є найбільш небезпечними для питної води?", a: ["Нафтопродукти та технічний пил", "Пестициди та висока концентрація нітратів", "Побутова хімія та фосфати", "Залишки будівельних матеріалів"], c: 1 },
+            { q: "Які наслідки має зниження pH стічних вод до 4.5 одиниць?", a: ["Прискорення процесів самоочищення водойми", "Зменшення корозії металевих конструкцій", "Створення анаеробних зон та загибель мікрофлори", "Нейтралізація токсичних сполук фосфору"], c: 2 }
         ];
         
         let curQ = 0;
