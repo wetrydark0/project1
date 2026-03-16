@@ -76,12 +76,10 @@
 
         .glass-card:hover { border-color: var(--primary); transform: translateY(-5px); }
         
-        /* ТУТ ЗМЕНШЕНО РОЗМІР ЗАГОЛОВКІВ (stat-num) */
         .stat-num { font-size: 1.8rem; font-weight: 900; color: var(--primary); display: block; margin-bottom: 10px; text-transform: uppercase; }
         .card-desc { font-size: 0.9rem; color: #ccc; }
         .full-info { display: none; margin-top: 20px; font-size: 1.1rem; line-height: 1.6; color: #fff; }
 
-        /* АКТИВНА КАРТКА */
         .glass-card.active {
             position: fixed;
             top: 50%; left: 50%;
@@ -215,6 +213,27 @@
                     <span class="stat-num">Агро-стоки</span>
                     <p class="card-desc">Стоки м'ясокомбінатів та молочних заводів.</p>
                     <div class="full-info">Харчова промисловість генерує стоки з екстремальною концентрацією органіки, що дуже швидко гниє. Така вода споживає кисень у річці в десять разів інтенсивніше за побутові відходи. Без спеціальних жировловлювачів ці підприємства перетворюють воду на липку токсичну суміш.</div>
+                </div>
+            </div>
+        </section>
+
+        <section id="s4">
+            <h2>Етапи Очищення Води</h2>
+            <div class="grid">
+                <div class="glass-card" onclick="openCard(this, event)">
+                    <span class="stat-num">Етап 1</span>
+                    <p class="card-desc">Механічна фільтрація великого сміття.</p>
+                    <div class="full-info">На першому етапі вода проходить через автоматизовані решітки та пісковловлювачі. Тут видаляється пластик, папір, каміння та пісок. Це критично важливо для захисту насосів від пошкоджень, проте на цьому етапі вода все ще залишається хімічно брудною та небезпечною.</div>
+                </div>
+                <div class="glass-card" onclick="openCard(this, event)">
+                    <span class="stat-num">Етап 2</span>
+                    <p class="card-desc">Біологічне очищення активним мулом.</p>
+                    <div class="full-info">Це «серце» очисної станції. У спеціальних басейнах (аеротенках) живуть мільярди мікроорганізмів, які поїдають органічні забруднювачі. Вони перетворюють шкідливі відходи на нешкідливий газ та надлишковий мул. Без цього етапу річки б миттєво зацвітали та гинули.</div>
+                </div>
+                <div class="glass-card" onclick="openCard(this, event)">
+                    <span class="stat-num">Етап 3</span>
+                    <p class="card-desc">Хімічне знезараження та скид.</p>
+                    <div class="full-info">На фінальній стадії воду очищують від фосфатів та залишків бактерій за допомогою ультрафіолету або спеціальних реагентів. Тільки після цього вода стає достатньо безпечною, щоб її можна було повернути в природне середовище, не порушуючи екосистему річки.</div>
                 </div>
             </div>
         </section>
