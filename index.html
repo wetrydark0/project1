@@ -344,17 +344,18 @@
         </section>
 
         <section id="final-slide">
-            <h1>МАЙБУТНЄ ЗА НАМИ.</h1>
-            <button id="quiz-trigger" style="margin-top: 50px;" onclick="location.reload()">ПЕРЕЗАПУСТИТИ</button>
+            <div style="text-align: center; width: 100%;">
+                <h1 style="font-size: clamp(3rem, 10vw, 7rem); margin-bottom: 80px;">
+                    МАЙБУТНЄ<br><span style="color: var(--primary)">ЗА НАМИ.</span>
+                </h1>
+                
+                <button id="quiz-trigger" 
+                        style="padding: 12px 24px; font-size: 0.9rem; margin-top: 20px;" 
+                        onclick="location.reload()">
+                    ПЕРЕЗАПУСТИТИ
+                </button>
+            </div>
         </section>
-    </div>
-
-    <div class="quiz-overlay" id="qOverlay">
-        <div class="quiz-card">
-            <div id="qContent"></div>
-            <button class="next-btn" id="nextBtn" onclick="nextQuestion()">НАСТУПНЕ ПИТАННЯ</button>
-        </div>
-    </div>
 
     <script>
         function openCard(card, event) {
