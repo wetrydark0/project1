@@ -20,7 +20,7 @@
             --success: #2ecc71;
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; cursor: none !important; } 
+        * { margin: 0; padding: 0; box-sizing: border-box; } 
 
         html { 
             scroll-snap-type: y mandatory; 
@@ -34,7 +34,7 @@
             color: var(--text);
             font-family: 'Plus Jakarta Sans', sans-serif;
             overflow-x: hidden;
-            perspective: 1000px; /* Для 3D ефектів */
+            perspective: 1000px;
         }
 
         #particles-js {
@@ -59,7 +59,7 @@
         }
 
         #main-content {
-            transition: opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: filter 0.6s ease;
         }
 
         section {
@@ -99,7 +99,6 @@
             transition: border-color 0.3s ease;
         }
 
-        /* Glow-слід всередині картки */
         .card-glow {
             position: absolute;
             top: 0; left: 0;
@@ -117,11 +116,13 @@
             top: 50%; left: 50%;
             transform: translate(-50%, -50%) !important;
             width: 90%; max-width: 900px;
+            max-height: 90vh;
+            overflow-y: auto;
             z-index: 9999;
             background: #05070a;
             border: 2px solid var(--primary);
             cursor: default;
-            padding: 60px;
+            padding: 40px;
             border-radius: 40px;
             display: block;
             text-align: left;
@@ -129,7 +130,7 @@
         
         .glass-card.active .stat-num { 
             font-family: 'Montserrat', sans-serif;
-            font-size: 5.5rem; 
+            font-size: clamp(2.5rem, 8vw, 5.5rem); 
             color: #fff; 
             margin-bottom: 20px;
             line-height: 1;
@@ -271,7 +272,7 @@
                     <div class="card-glow"></div>
                     <span class="stat-num">pH 4.5</span>
                     <p class="card-desc">рівень кислотності стоків хімпрому.</p>
-                    <div class="full-info">Кислотне забруднення агресивно вбиває корисні бактерії, що відповідають за природне самоочищення води. Це створює так звані мертві анаеробні зони, де життя стає неможливим для будь-яких організмів. Порушення кислотного балансу також прискорює корозію металевих труб та бетонних конструкцій очисних споруд. Відновлення екосистеми після такого хімічного опіку може тривати багато десятиліть поспіль.</div>
+                    <div class="full-info">Кислотне забруднення агресивно вбиває корисні бактерії, що відповідають за природне самоочищення води. Це створює так звані мертві анаеробні зони, де життя стає неможливим для будь-яких організмів. Порушення кислотного балансу також прискорює корозію металевих труб та бетонних конструкцій очисних споруд. Відновлення екосистеми після такого хімічного опіку може тривати багато десятиліти поспіль.</div>
                 </div>
                 <div class="glass-card" onclick="openCard(this, event)">
                     <div class="card-glow"></div>
@@ -338,9 +339,9 @@
                     <span class="stat-num">ЕТАП 1</span>
                     <p class="card-desc">Механічна фільтрація великого сміття.</p>
                     <div class="full-info">
-                        <div style="display: flex; gap: 20px; align-items: flex-start;">
-                            <div style="flex: 1;">На цьому етапі вода проходить через автоматизовані решітки та спеціальні пісковловлювачі. Тут видаляється пластик, папір, каміння та інші великі механічні забруднювачі. Це критично важливо для захисту дорогих насосів від пошкоджень та засмічення.</div>
-                            <div style="flex: 1; min-width: 200px;"><img src="Images1/step1.jpg" style="width: 100%; border-radius: 10px; border: 1px solid var(--primary);"></div>
+                        <div style="display: flex; gap: 20px; align-items: flex-start; flex-wrap: wrap;">
+                            <div style="flex: 1; min-width: 250px;">На цьому етапі вода проходить через автоматизовані решітки та спеціальні пісковловлювачі. Тут видаляється пластик, папір, каміння та інші великі механічні забруднювачі. Це критично важливо для захисту дорогих насосів від пошкоджень та засмічення.</div>
+                            <div style="flex: 1; min-width: 250px;"><img src="Images1/step1.jpg" style="width: 100%; border-radius: 10px; border: 1px solid var(--primary);"></div>
                         </div>
                     </div>
                 </div>
@@ -349,9 +350,9 @@
                     <span class="stat-num">ЕТАП 2</span>
                     <p class="card-desc">Біологічне очищення активним мулом.</p>
                     <div class="full-info">
-                        <div style="display: flex; gap: 20px; align-items: flex-start;">
-                            <div style="flex: 1;">Спеціальні колонії бактерій, що називаються активним мулом, поїдають розчинену у воді органіку. Для підтримання їхньої життєдіяльності в аеротенки постійно подається велика кількість кисню. Це найбільш ефективний та природний метод позбавлення води від господарських забруднень.</div>
-                            <div style="flex: 1; min-width: 200px;"><img src="Images1/step2.jpg" style="width: 100%; border-radius: 10px; border: 1px solid var(--primary);"></div>
+                        <div style="display: flex; gap: 20px; align-items: flex-start; flex-wrap: wrap;">
+                            <div style="flex: 1; min-width: 250px;">Спеціальні колонії бактерій, що називаються активним мулом, поїдають розчинену у воді органіку. Для підтримання їхньої життєдіяльності в аеротенки постійно подається велика кількість кисню. Це найбільш ефективний та природний метод позбавлення води від господарських забруднень.</div>
+                            <div style="flex: 1; min-width: 250px;"><img src="Images1/step2.jpg" style="width: 100%; border-radius: 10px; border: 1px solid var(--primary);"></div>
                         </div>
                     </div>
                 </div>
@@ -360,9 +361,9 @@
                     <span class="stat-num">ЕТАП 3</span>
                     <p class="card-desc">Вторинне відстоювання та дезінфекція.</p>
                     <div class="full-info">
-                        <div style="display: flex; gap: 20px; align-items: flex-start;">
-                            <div style="flex: 1;">У вторинних відстійниках мул повністю осідає на дно, залишаючи над собою прозору воду. Перед випуском у річку вода проходить крізь потужне УФ-випромінювання для знищення вірусів. Це гарантує повну безпеку очищеної води для навколишнього середовища та здоров'я людей.</div>
-                            <div style="flex: 1; min-width: 200px;"><img src="Images1/step3.jpg" style="width: 100%; border-radius: 10px; border: 1px solid var(--primary);"></div>
+                        <div style="display: flex; gap: 20px; align-items: flex-start; flex-wrap: wrap;">
+                            <div style="flex: 1; min-width: 250px;">У вторинних відстійниках мул повністю осідає на дно, залишаючи над собою прозору воду. Перед випуском у річку вода проходить крізь потужне УФ-випромінювання для знищення вірусів. Це гарантує повну безпеку очищеної води для навколишнього середовища та здоров'я людей.</div>
+                            <div style="flex: 1; min-width: 250px;"><img src="Images1/step3.jpg" style="width: 100%; border-radius: 10px; border: 1px solid var(--primary);"></div>
                         </div>
                     </div>
                 </div>
@@ -384,7 +385,7 @@
             <div style="text-align: center;">
                 <h1 style="font-size: 4rem;">КОНТРОЛЬ ЗНАНЬ</h1>
                 <p style="margin-bottom: 30px; color: #888;"></p>
-                <button id="quiz-trigger" onclick="startQuiz()">РОЗПОЧАТИ ТЕСТУВАННЯ</button>
+                <button id="quiz-trigger" onclick="startQuiz()">РОЗПОЧАТИ ТЕСТУВАТНЯ</button>
             </div>
         </section>
 
@@ -427,7 +428,7 @@
             }
         });
 
-        // 2. КУРСОР ТА ЕФЕКТИ КАРТОК (TILT + GLOW)
+        // 2. КУРСОР ТА ЕФЕКТИ КАРТОК
         const cursor = document.getElementById('custom-cursor');
         document.addEventListener('mousemove', (e) => {
             gsap.to(cursor, { x: e.clientX, y: e.clientY, duration: 0.1 });
@@ -440,11 +441,9 @@
                 const x = e.clientX - rect.left;
                 const y = e.clientY - rect.top;
 
-                // Оновлюємо CSS змінні для Glow-сліду
                 card.style.setProperty('--mouse-x', `${x}px`);
                 card.style.setProperty('--mouse-y', `${y}px`);
 
-                // Розрахунок Tilt (3D нахил)
                 const centerX = rect.width / 2;
                 const centerY = rect.height / 2;
                 const rotateX = (y - centerY) / 10;
@@ -474,11 +473,13 @@
             y: 80, opacity: 0, stagger: 0.1, duration: 1, ease: "power4.out"
         });
 
-        // 4. ФУНКЦІЇ КАРТОК + STAGGERED REVEAL
+        // 4. ФУНКЦІЇ КАРТОК
         function openCard(card, event) {
             if(card.classList.contains('active')) return;
             event.stopPropagation();
-            document.getElementById('main-content').style.opacity = '0';
+            
+            // Замість opacity 0 робимо blur для фону
+            document.getElementById('main-content').style.filter = 'blur(10px) brightness(0.5)';
             document.getElementById('close-layer').style.display = 'block';
             
             const clone = card.cloneNode(true);
@@ -486,7 +487,6 @@
             clone.id = "active-modal";
             document.body.appendChild(clone);
             
-            // Staggered Text Reveal анімація
             gsap.from("#active-modal .stat-num, #active-modal .card-desc, #active-modal .full-info", {
                 opacity: 0,
                 y: 30,
@@ -504,11 +504,11 @@
             if(!modal) return;
             modal.remove();
             document.getElementById('close-layer').style.display = 'none';
-            document.getElementById('main-content').style.opacity = '1';
+            document.getElementById('main-content').style.filter = 'none';
             document.body.classList.remove('no-scroll');
         }
 
-        // ВІКТОРИНА (БЕЗ ЗМІН)
+        // ВІКТОРИНА (БЕЗ ЗМІН ЛОГІКИ)
         const questions = [
             { q: "Яку роль відіграє активний мул на другому етапі очищення?", a: ["Механічне відсіювання дрібних часток пластику", "Окиснення органічних сполук колоніями бактерій", "Хімічне осадження солей важких металів", "Зміна рівня кислотності для дезінфекції"], c: 1 },
             { q: "Який показник зношеності магістральних колекторів є критичним для міст?", a: ["Близько 25%", "Понад 50%", "Приблизно 75%", "Майже 95%"], c: 2 },
